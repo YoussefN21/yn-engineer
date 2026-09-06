@@ -503,7 +503,14 @@ svg{ width:100%; height:100%; }
 
 @media (max-width: 900px){
   .project-slider{ grid-template-columns: 1fr; }
-  .project-stage{ aspect-ratio: 4/3.2; }
+  /* Safari has a known bug sizing aspect-ratio on a CSS grid item (a
+     circular layout dependency it doesn't always resolve), collapsing
+     the box to near-zero height instead — confirmed on a real iPhone
+     while Chromium and iPad Safari render it fine. Every child here
+     (canvas, arrows, zoom buttons) is already position:absolute, so
+     the old height:0 + padding-top percentage trick sizes the box
+     without aspect-ratio at all, sidestepping the bug everywhere. */
+  .project-stage{ aspect-ratio: none; height:0; padding-top:80%; }
   #projectSlider.reveal{ opacity:1 !important; transform:none !important; }
 }
 
