@@ -5,6 +5,17 @@
   if (!canvas || !stage || typeof THREE === "undefined" || !window.YN3D) return;
   const YN3D = window.YN3D;
 
+  /* This section's WebGL renderer + environment map are as heavyweight to
+     spin up as the hero's, but the slider lives below the fold — booting
+     it eagerly means two full Three.js scenes compete for GPU/shader-
+     compile resources at the exact moment of page load, which is a known
+     trigger for mobile Safari silently dropping a WebGL context under
+     memory pressure (desktop and iPad have enough headroom to hide it).
+     Deferring to idle time lets the hero's already-visible scene finish
+     settling first, with no visible effect since this stage isn't on
+     screen yet anyway. */
+  function boot() {
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const placeholder = document.getElementById("projectPlaceholder");
   const elTitle = document.getElementById("slideTitle");
@@ -61,7 +72,7 @@
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth <= 620 ? 1 : 2));
   renderer.setSize(width, height, false);
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -325,5 +336,12 @@
         renderer.setAnimationLoop(entry.isIntersecting ? render : null);
       });
     }, { threshold: 0 }).observe(stage);
+  }
+  } // end boot()
+
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(boot, { timeout: 2000 });
+  } else {
+    setTimeout(boot, 300);
   }
 })();
