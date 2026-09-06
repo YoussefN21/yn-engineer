@@ -119,7 +119,7 @@
 
   function heroTimeline() {
     const tl = gsap.timeline();
-    tl.to(".hero-canvas", { opacity: 1, duration: 1.4, ease: "power2.out" })
+    tl.to(".hero-canvas", { opacity: window.innerWidth <= 860 ? 0.16 : 1, duration: 1.4, ease: "power2.out" })
       .to(".hero-avatar", { opacity: 1, scale: 1, duration: .6, ease: "back.out(1.6)" }, "-=1.15")
       .to(".eyebrow", { opacity: 1, y: 0, duration: .5 }, "-=.4")
       .to(heroWords, { yPercent: 0, opacity: 1, duration: .9, stagger: .05 }, "-=.25")
@@ -152,6 +152,7 @@
       scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" }
     });
   });
+  window.addEventListener("load", () => window.ScrollTrigger && ScrollTrigger.refresh());
 
   /* ================================================================
      Section title word reveal
