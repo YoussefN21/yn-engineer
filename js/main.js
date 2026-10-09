@@ -235,7 +235,7 @@
     mfgGalleryTitle.textContent = data.title;
     if (data.images.length) {
       mfgGalleryGrid.innerHTML = data.images
-        .map(src => `<div class="mfg-gallery-item"><img src="${src}" alt="${data.title}" loading="lazy"></div>`)
+        .map(src => `<div class="mfg-gallery-item"><img src="${src.replace(/\.jpg$/, ".webp")}" data-full="${src}" alt="${data.title}" loading="lazy" decoding="async"></div>`)
         .join("");
     } else {
       mfgGalleryGrid.innerHTML = Array.from({ length: 3 }).map(() => `
@@ -285,7 +285,7 @@
   if (lightbox && mfgGalleryGrid) {
     mfgGalleryGrid.addEventListener("click", (e) => {
       const img = e.target.closest("img");
-      if (img) openLightbox(img.src, img.alt);
+      if (img) openLightbox(img.dataset.full || img.src, img.alt);
     });
     lightboxClose.addEventListener("click", closeLightbox);
     lightbox.addEventListener("click", (e) => {
@@ -302,7 +302,11 @@
      bandwidth or GPU decode time on a background element off-screen.
   ================================================================= */
   const showcaseVideo = document.getElementById("showcaseVideo");
-  if (showcaseVideo) {
+  const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const slowConnection = !!netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || "") || (netConn.downlink > 0 && netConn.downlink < 0.8));
+  if (showcaseVideo && slowConnection) {
+    showcaseVideo.removeAttribute("src");   // keep just the poster image
+  } else if (showcaseVideo) {
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

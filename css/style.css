@@ -707,6 +707,15 @@ svg{ width:100%; height:100%; }
 .reel-player.is-muted .i-sound{ display:none; }
 .reel-player.is-muted .i-muted{ display:block; }
 .reel-time{ flex-shrink:0; font-family: var(--font-mono); font-size:.76rem; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.8); min-width: 84px; }
+.reel-quality{
+  flex-shrink:0; height:28px; padding: 0 9px; border-radius:7px;
+  border:1px solid rgba(255,255,255,.3); background:transparent; color:#fff;
+  font-family: var(--font-mono); font-size:.7rem; letter-spacing:.04em; cursor:pointer;
+  transition: background .2s, border-color .2s;
+}
+.reel-quality.is-auto::after{ content:" auto"; color: rgba(255,255,255,.55); }
+.reel-quality:hover{ background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.55); }
+.reel-quality:focus-visible{ outline: 2px solid #fff; outline-offset: 1px; }
 .reel-scrub{ position:relative; flex:1; height:22px; cursor:pointer; }
 .reel-scrub::before{ content:""; position:absolute; left:0; right:0; top:10px; height:3px; border-radius:2px; background: rgba(255,255,255,.25); }
 .reel-scrub-fill{

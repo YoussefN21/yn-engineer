@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=10">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
@@ -56,7 +56,7 @@
   <div class="hero-inner">
     <div class="hero-copy">
       <div class="hero-identity">
-        <img src="assets/images/profile-square.jpg" alt="Youssef Hesham Nasr" class="hero-avatar">
+        <img src="assets/images/profile-square.webp" alt="Youssef Hesham Nasr" class="hero-avatar" width="280" height="280" fetchpriority="high">
         <div class="hero-identity-text">
           <p class="eyebrow">R&amp;D Mechanical Design Engineer</p>
           <h1 class="hero-title">Youssef Hesham<br>Nasr</h1>
@@ -93,7 +93,7 @@
     </div>
 
     <div class="reel-player is-preview" id="reelPlayer">
-      <video class="reel-video" id="reelVideo" src="assets/video/showreel.mp4?v=2" poster="assets/video/showreel-poster.jpg" muted loop playsinline preload="metadata"></video>
+      <video class="reel-video" id="reelVideo" src="assets/video/showreel-preview.mp4" data-preview="assets/video/showreel-preview.mp4" data-src480="assets/video/showreel-480.mp4" data-src720="assets/video/showreel-720.mp4" data-src1080="assets/video/showreel-1080.mp4" poster="assets/video/showreel-poster.webp" muted loop playsinline preload="none"></video>
 
       <button type="button" class="reel-start" id="reelStart" aria-label="Watch the showreel with sound">
         <span class="reel-start-icon" aria-hidden="true">
@@ -116,6 +116,7 @@
           <svg class="i-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
           <svg class="i-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m23 9-6 6M17 9l6 6"/></svg>
         </button>
+        <button type="button" class="reel-quality is-auto" id="reelQuality" aria-label="Change quality">720p</button>
         <button type="button" class="reel-btn" id="reelFull" aria-label="Fullscreen">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
         </button>
@@ -164,7 +165,7 @@
 
 <!-- ============ VIDEO SHOWCASE ============ -->
 <section class="showcase" id="showcase">
-  <video class="showcase-media" id="showcaseVideo" src="assets/video/ultimate-leg-machine-web.mp4?v=2" poster="assets/video/ultimate-leg-machine-poster.jpg" muted loop playsinline preload="none"></video>
+  <video class="showcase-media" id="showcaseVideo" src="assets/video/ultimate-leg-machine-web.mp4?v=3" poster="assets/video/ultimate-leg-machine-poster.webp" muted loop playsinline preload="none"></video>
   <div class="showcase-vignette"></div>
   <div class="showcase-spot"></div>
   <div class="showcase-copy container reveal">
@@ -342,9 +343,9 @@
           <p class="shopfloor-inline-title">Featured Shop Floor &mdash; El-Nesr For Sheet Metal Cutting</p>
           <div class="shopfloor-slider" id="shopfloorSlider">
             <div class="shopfloor-slider-track">
-              <img class="shopfloor-slide" src="assets/images/shopfloor/elnesr-cutting.jpg" alt="CNC plasma cutting sparks — El-Nesr shop floor" loading="lazy">
-              <img class="shopfloor-slide" src="assets/images/shopfloor/elnesr-parts.jpg" alt="Finished cut sheet-metal parts — El-Nesr shop floor" loading="lazy">
-              <video class="shopfloor-slide" id="shopfloorVideo" data-src="assets/video/elnesr-cnc.mp4?v=2" poster="assets/video/elnesr-cnc-poster.jpg" controls playsinline preload="none"></video>
+              <img class="shopfloor-slide" src="assets/images/shopfloor/elnesr-cutting.webp" alt="CNC plasma cutting sparks — El-Nesr shop floor" loading="lazy">
+              <img class="shopfloor-slide" src="assets/images/shopfloor/elnesr-parts.webp" alt="Finished cut sheet-metal parts — El-Nesr shop floor" loading="lazy">
+              <video class="shopfloor-slide" id="shopfloorVideo" data-src="assets/video/elnesr-cnc.mp4?v=2" poster="assets/video/elnesr-cnc-poster.webp" controls playsinline preload="none"></video>
             </div>
             <button type="button" class="shopfloor-arrow shopfloor-arrow-prev" id="shopfloorPrev" aria-label="Previous">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
@@ -606,9 +607,9 @@
 
     <div class="build-grid reveal">
       <div class="compare" id="buildCompare" style="--pos:50%">
-        <img class="compare-img" src="assets/images/build/pediatric-leg-press-real.jpg" alt="Manufactured Pediatric Rehabilitation Leg Press on the workshop floor" width="638" height="769" loading="lazy">
+        <img class="compare-img" src="assets/images/build/pediatric-leg-press-real.webp" alt="Manufactured Pediatric Rehabilitation Leg Press on the workshop floor" width="638" height="769" loading="lazy">
         <div class="compare-top">
-          <img class="compare-img" src="assets/images/build/pediatric-leg-press-cad.jpg" alt="CAD render of the Pediatric Rehabilitation Leg Press" width="638" height="769" loading="lazy">
+          <img class="compare-img" src="assets/images/build/pediatric-leg-press-cad.webp" alt="CAD render of the Pediatric Rehabilitation Leg Press" width="638" height="769" loading="lazy">
         </div>
         <span class="compare-label compare-label-cad">CAD render</span>
         <span class="compare-label compare-label-real">Manufactured</span>
@@ -672,19 +673,19 @@
     <div class="build-process">
       <figure class="build-media reveal">
         <div class="build-media-frame">
-          <video class="build-video" data-src="assets/video/build-laser-cutting.mp4?v=2" poster="assets/video/build-laser-cutting-poster.jpg" muted loop playsinline preload="none" aria-label="CNC laser cutting a part"></video>
+          <video class="build-video" data-src="assets/video/build-laser-cutting.mp4?v=2" poster="assets/video/build-laser-cutting-poster.webp" muted loop playsinline preload="none" aria-label="CNC laser cutting a part"></video>
         </div>
         <figcaption><span>01</span> Laser cutting</figcaption>
       </figure>
       <figure class="build-media reveal">
         <div class="build-media-frame">
-          <img src="assets/images/build/powder-coating.jpg" alt="Machine parts hanging in the powder-coating booth" width="1280" height="960" loading="lazy">
+          <img src="assets/images/build/powder-coating.webp" alt="Machine parts hanging in the powder-coating booth" width="1280" height="960" loading="lazy">
         </div>
         <figcaption><span>02</span> Powder coating</figcaption>
       </figure>
       <figure class="build-media reveal">
         <div class="build-media-frame">
-          <video class="build-video" data-src="assets/video/build-cad-to-real.mp4?v=2" poster="assets/video/build-cad-to-real-poster.jpg" muted loop playsinline preload="none" aria-label="The CAD model on a laptop, then the finished machine behind it"></video>
+          <video class="build-video" data-src="assets/video/build-cad-to-real.mp4?v=2" poster="assets/video/build-cad-to-real-poster.webp" muted loop playsinline preload="none" aria-label="The CAD model on a laptop, then the finished machine behind it"></video>
         </div>
         <figcaption><span>03</span> From screen to shop floor</figcaption>
       </figure>
@@ -782,7 +783,7 @@
 <script src="js/three-common.js?v=11"></script>
 <script src="js/hero3d.js?v=40"></script>
 <script src="js/projects3d.js?v=34"></script>
-<script src="js/main.js?v=39"></script>
-<script src="js/reel.js?v=3"></script>
+<script src="js/main.js?v=41"></script>
+<script src="js/reel.js?v=5"></script>
 </body>
 </html>
