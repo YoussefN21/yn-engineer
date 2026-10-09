@@ -68,13 +68,13 @@
      lap) so the floating transition never stalls on a network fetch.
   ================================================================= */
   const MODELS = [
-    "assets/models/multifunctional-trainer.glb?v=3",
-    "assets/models/home-cable-machine.glb?v=1",
-    "assets/models/ultimate-leg-machine.glb?v=1",
-    "assets/models/linear-leg-press.glb?v=1",
-    "assets/models/pediatric-leg-press.glb?v=1",
-    "assets/models/baby-mobility.glb?v=1",
-    "assets/models/special-dumbbell.glb?v=1"
+    "assets/models/multifunctional-trainer.glb?d=1&v=3",
+    "assets/models/home-cable-machine.glb?d=1&v=1",
+    "assets/models/ultimate-leg-machine.glb?d=1&v=1",
+    "assets/models/linear-leg-press.glb?d=1&v=1",
+    "assets/models/pediatric-leg-press.glb?d=1&v=1",
+    "assets/models/baby-mobility.glb?d=1&v=1",
+    "assets/models/special-dumbbell.glb?d=1&v=1"
   ];
   /* Per-model presentation corrections — each source file was exported
      from CAD facing whatever direction the designer happened to be
@@ -116,7 +116,7 @@
   const ENTER_DURATION = 1.05;
   const ENTER_DELAY = 0.35;
 
-  const loader = new THREE.GLTFLoader();
+  const loader = YN3D.makeGLTFLoader();
   const wrappers = new Array(MODELS.length).fill(null);
   let activeIndex = -1;
   let cyclingStarted = false;

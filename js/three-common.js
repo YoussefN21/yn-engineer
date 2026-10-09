@@ -264,6 +264,23 @@
     camera.lookAt(0, 0, 0);
   }
 
+  /* Every .glb on the site is Draco-compressed (~85% smaller downloads).
+     One shared DRACOLoader means the decoder (r128's own build, matching
+     this three.js version) is fetched and compiled only once, no matter
+     how many models the hero carousel and the projects slider load. */
+  let dracoLoader = null;
+  function makeGLTFLoader() {
+    const loader = new THREE.GLTFLoader();
+    if (THREE.DRACOLoader) {
+      if (!dracoLoader) {
+        dracoLoader = new THREE.DRACOLoader();
+        dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/gltf/");
+      }
+      loader.setDRACOLoader(dracoLoader);
+    }
+    return loader;
+  }
+
   window.YN3D = {
     srgb,
     buildEnvironment,
@@ -271,6 +288,7 @@
     buildGround,
     applyFinishes,
     normalizeModel,
-    fitCameraToRadius
+    fitCameraToRadius,
+    makeGLTFLoader
   };
 })();
