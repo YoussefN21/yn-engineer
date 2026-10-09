@@ -39,7 +39,7 @@
     link.addEventListener("click", () => navLinks.classList.remove("open"));
   });
 
-  const sections = ["home", "about", "services", "projects", "contact"]
+  const sections = ["home", "about", "services", "projects", "built", "contact"]
     .map(id => document.getElementById(id)).filter(Boolean);
   const navLinkEls = document.querySelectorAll(".nav-link");
   const sectionObserver = new IntersectionObserver((entries) => {

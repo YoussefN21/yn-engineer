@@ -38,7 +38,7 @@
     { title: "Home Cable Machine", tag: "Gym Equipment · Home Fitness", desc: "Compact home-use cable machine engineered for full-body resistance training in a space-saving footprint.", model: "assets/models/home-cable-machine.glb?v=1" },
     { title: "Ultimate Leg Machine", tag: "Gym Equipment · Multi-Station", desc: "Full leg-day station combining leg press, hack squat and calf raise into one heavy-duty commercial frame.", model: "assets/models/ultimate-leg-machine.glb?v=1", yaw: Math.PI },
     { title: "Linear Leg Press", tag: "Gym Equipment · FEA", desc: "Linear-rail leg press engineered for smooth, guided resistance with a reinforced load-bearing frame.", model: "assets/models/linear-leg-press.glb?v=1" },
-    { title: "Pediatric Rehabilitation Leg Press", tag: "Medical Devices · Rehabilitation", desc: "Rehabilitation-grade leg press scaled and engineered for pediatric physical therapy programs.", model: "assets/models/pediatric-leg-press.glb?v=1",
+    { title: "Pediatric Rehabilitation Leg Press", tag: "Medical Devices · Rehabilitation", desc: "Custom-made for a child with muscular atrophy, designed from his own body measurements for a 3 kg working load, with room to add more weight.", model: "assets/models/pediatric-leg-press.glb?v=1",
       /* Actual foot plane, found by fitting a plane through ALL FOUR ground-contact
          feet — front pair AND rear pair, spanning nearly the full frame length —
          not a one-camera-angle guess, so it now reads correctly from every orbit
