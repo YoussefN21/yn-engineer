@@ -3,109 +3,142 @@
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function fmt(t) {
-    if (!isFinite(t)) t = 0;
-    const m = Math.floor(t / 60);
-    const s = Math.floor(t % 60);
-    return `${m}:${String(s).padStart(2, "0")}`;
-  }
-
   /* ================================================================
-     Showreel — the hero badge plays a tiny muted loop of the reel;
-     clicking it grows a circle out of the badge (clip-path) until the
-     whole screen becomes the hero's own studio-grey stage, with the
-     full video (sound on) framed in the same viewfinder corners the
-     reel itself uses. Closes on Esc, the X, or when the video ends.
+     Showreel — plays muted on loop while in view (a moving poster);
+     "Play with sound" restarts the full cut with custom controls.
+     The chapter strip under the player is the timeline: each segment
+     fills as its chapter plays, and clicking one jumps to it.
   ================================================================= */
-  const badge = document.getElementById("reelBadge");
-  const reel = document.getElementById("reel");
+  const player = document.getElementById("reelPlayer");
   const video = document.getElementById("reelVideo");
-  const toggle = document.getElementById("reelToggle");
-  const closeBtn = document.getElementById("reelClose");
-  const time = document.getElementById("reelTime");
-  const progress = document.getElementById("reelProgress");
-  const fill = document.getElementById("reelProgressFill");
-  const preview = badge?.querySelector("video");
 
-  if (reduceMotion && preview) {
-    preview.removeAttribute("autoplay");
-    preview.pause();
-  }
+  if (player && video) {
+    const startBtn = document.getElementById("reelStart");
+    const toggleBtn = document.getElementById("reelToggle");
+    const muteBtn = document.getElementById("reelMute");
+    const fullBtn = document.getElementById("reelFull");
+    const scrub = document.getElementById("reelScrub");
+    const scrubFill = document.getElementById("reelScrubFill");
+    const timeEl = document.getElementById("reelTime");
+    const chapters = [...document.querySelectorAll("#reelChapters .reel-chapter")];
+    let inView = false;
+    let hideTimer = null;
 
-  if (badge && reel && video) {
-    let lastFocus = null;
+    const isPreview = () => player.classList.contains("is-preview");
+    const fmt = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 
-    function setOrigin() {
-      const r = badge.getBoundingClientRect();
-      reel.style.setProperty("--cx", `${r.left + r.width / 2}px`);
-      reel.style.setProperty("--cy", `${r.top + r.height / 2}px`);
+    function syncState() {
+      player.classList.toggle("is-paused", video.paused);
+      player.classList.toggle("is-playing", !video.paused);
+      player.classList.toggle("is-muted", video.muted);
+      toggleBtn.setAttribute("aria-label", video.paused ? "Play" : "Pause");
+      muteBtn.setAttribute("aria-label", video.muted ? "Unmute" : "Mute");
     }
 
-    function syncToggle() {
-      const paused = video.paused;
-      reel.classList.toggle("is-paused", paused);
-      toggle.setAttribute("aria-label", paused ? "Play" : "Pause");
-    }
-
-    function open() {
-      lastFocus = document.activeElement;
-      if (!video.src) video.src = video.dataset.src;
-      setOrigin();
-      reel.setAttribute("aria-hidden", "false");
-      reel.classList.add("open");
-      document.documentElement.classList.add("reel-lock");
-      preview?.pause();
-      video.currentTime = 0;
-      video.play().catch(() => {});
-      syncToggle();
-      closeBtn.focus({ preventScroll: true });
-    }
-
-    function close() {
-      if (!reel.classList.contains("open")) return;
-      setOrigin();
-      video.pause();
-      reel.classList.remove("open");
-      reel.setAttribute("aria-hidden", "true");
-      document.documentElement.classList.remove("reel-lock");
-      if (!reduceMotion) preview?.play().catch(() => {});
-      (lastFocus || badge).focus({ preventScroll: true });
-    }
-
-    function togglePlay() {
-      if (video.paused) video.play().catch(() => {}); else video.pause();
-    }
-
-    badge.addEventListener("click", open);
-    closeBtn.addEventListener("click", close);
-    toggle.addEventListener("click", togglePlay);
-    video.addEventListener("click", togglePlay);
-    video.addEventListener("play", syncToggle);
-    video.addEventListener("pause", syncToggle);
-    video.addEventListener("ended", close);
-    video.addEventListener("timeupdate", () => {
+    function syncProgress() {
+      const t = video.currentTime;
       const d = video.duration || 50;
-      fill.style.transform = `scaleX(${video.currentTime / d})`;
-      time.textContent = `${fmt(video.currentTime)} / ${fmt(d)}`;
+      scrubFill.style.transform = `scaleX(${t / d})`;
+      timeEl.textContent = `${fmt(t)} / ${fmt(d)}`;
+      scrub.setAttribute("aria-valuenow", Math.round(t));
+      chapters.forEach((c) => {
+        const s = +c.dataset.start, e = +c.dataset.end;
+        const p = Math.min(Math.max((t - s) / (e - s), 0), 1);
+        c.style.setProperty("--p", p.toFixed(3));
+        const active = t >= s && t < e;
+        if (active && !c.classList.contains("is-active")) {
+          /* on phones the strip scrolls sideways: keep the current chapter
+             in view (scrollLeft only, so the page itself never jumps) */
+          const strip = c.closest(".reel-chapters");
+          const li = c.parentElement;
+          if (strip.scrollWidth > strip.clientWidth) {
+            strip.scrollTo({ left: li.offsetLeft - strip.offsetLeft - 20, behavior: "smooth" });
+          }
+        }
+        c.classList.toggle("is-active", active);
+      });
+    }
+
+    function enterFull(at = 0) {
+      player.classList.remove("is-preview");
+      video.loop = false;
+      video.muted = false;
+      video.currentTime = at;
+      video.play().catch(() => {});
+      wakeControls();
+    }
+
+    function backToPreview() {
+      player.classList.add("is-preview");
+      video.loop = true;
+      video.muted = true;
+      video.currentTime = 0;
+      if (inView && !reduceMotion) video.play().catch(() => {}); else video.pause();
+      syncState();
+      syncProgress();
+    }
+
+    let overControls = false;
+    function wakeControls() {
+      player.classList.add("show-controls");
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!video.paused && !overControls) player.classList.remove("show-controls");
+      }, 2400);
+    }
+    const controlsBar = document.getElementById("reelControls");
+    controlsBar.addEventListener("pointerenter", () => { overControls = true; });
+    controlsBar.addEventListener("pointerleave", () => { overControls = false; wakeControls(); });
+
+    function seekFromEvent(e) {
+      const r = scrub.getBoundingClientRect();
+      const x = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
+      video.currentTime = x * (video.duration || 50);
+    }
+
+    startBtn.addEventListener("click", () => enterFull(0));
+    toggleBtn.addEventListener("click", () => (video.paused ? video.play() : video.pause()));
+    video.addEventListener("click", () => {
+      if (isPreview()) return enterFull(0);
+      video.paused ? video.play() : video.pause();
+    });
+    muteBtn.addEventListener("click", () => { video.muted = !video.muted; });
+    fullBtn.addEventListener("click", () => {
+      if (document.fullscreenElement) return document.exitFullscreen();
+      if (player.requestFullscreen) player.requestFullscreen();
+      else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); // iPhone
     });
 
-    progress.addEventListener("click", (e) => {
-      const r = progress.getBoundingClientRect();
-      if (video.duration) video.currentTime = ((e.clientX - r.left) / r.width) * video.duration;
+    let dragging = false;
+    scrub.addEventListener("pointerdown", (e) => { dragging = true; scrub.setPointerCapture(e.pointerId); seekFromEvent(e); });
+    scrub.addEventListener("pointermove", (e) => { if (dragging) seekFromEvent(e); });
+    scrub.addEventListener("pointerup", () => { dragging = false; });
+    scrub.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { video.currentTime += 5; e.preventDefault(); }
+      if (e.key === "ArrowLeft") { video.currentTime -= 5; e.preventDefault(); }
     });
 
-    document.addEventListener("keydown", (e) => {
-      if (!reel.classList.contains("open")) return;
-      if (e.key === "Escape") close();
-      if (e.key === " " && document.activeElement !== toggle) { e.preventDefault(); togglePlay(); }
-      /* keep keyboard focus inside the dialog */
-      if (e.key === "Tab") {
-        const items = [toggle, closeBtn];
-        const i = items.indexOf(document.activeElement);
-        e.preventDefault();
-        items[(i + (e.shiftKey ? -1 : 1) + items.length) % items.length].focus();
-      }
-    });
+    chapters.forEach((c) => c.addEventListener("click", () => {
+      const at = +c.dataset.start + 0.05;
+      if (isPreview()) enterFull(at); else { video.currentTime = at; video.play().catch(() => {}); }
+    }));
+
+    player.addEventListener("pointermove", () => { if (!isPreview()) wakeControls(); });
+    player.addEventListener("pointerdown", () => { if (!isPreview()) wakeControls(); }, true);
+    video.addEventListener("play", syncState);
+    video.addEventListener("pause", syncState);
+    video.addEventListener("volumechange", syncState);
+    video.addEventListener("timeupdate", syncProgress);
+    video.addEventListener("loadedmetadata", syncProgress);
+    video.addEventListener("ended", backToPreview);
+
+    new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      if (!inView) video.pause();
+      else if (isPreview() && !reduceMotion) video.play().catch(() => {});
+    }, { threshold: 0.3 }).observe(player);
+
+    syncState();
   }
 
   /* ================================================================

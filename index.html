@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=10">
 </head>
 <body>
 
@@ -79,19 +79,87 @@
       </div>
     </div>
   </div>
-  <!-- Showreel badge: live muted preview inside a rotating label; opens the full reel -->
-  <button type="button" class="reel-badge" id="reelBadge" aria-haspopup="dialog" aria-controls="reel" aria-label="Play showreel, 50 seconds, with sound">
-    <span class="reel-badge-video" aria-hidden="true">
-      <video src="assets/video/showreel-preview.mp4" poster="assets/video/showreel-preview-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
-    </span>
-    <svg class="reel-badge-ring" viewBox="0 0 200 200" aria-hidden="true">
-      <defs><path id="reelCircle" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"/></defs>
-      <text><textPath href="#reelCircle" textLength="524" lengthAdjust="spacing">PLAY SHOWREEL &#183; 0:50 &#183; PLAY SHOWREEL &#183; 0:50 &#183;</textPath></text>
-    </svg>
-    <span class="reel-badge-play" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
-    </span>
-  </button>
+</section>
+
+<!-- ============ SHOWREEL ============ -->
+<section class="reel-section" id="showreel" aria-label="Showreel">
+  <div class="container">
+    <div class="reel-head reveal">
+      <div>
+        <p class="section-kicker">Showreel &middot; 0:50</p>
+        <h2 class="section-title">From idea to machine,<br>in 50 seconds.</h2>
+      </div>
+      <p class="section-sub">How I take a gym machine from the first sketch to 3D design, manufacturing files and a finished build.</p>
+    </div>
+
+    <div class="reel-player is-preview" id="reelPlayer">
+      <video class="reel-video" id="reelVideo" src="assets/video/showreel.mp4" poster="assets/video/showreel-poster.jpg" muted loop playsinline preload="metadata"></video>
+
+      <button type="button" class="reel-start" id="reelStart" aria-label="Watch the showreel with sound">
+        <span class="reel-start-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+        </span>
+        <span class="reel-start-label">Watch with sound</span>
+        <span class="reel-start-time">0:50</span>
+      </button>
+
+      <div class="reel-controls" id="reelControls">
+        <button type="button" class="reel-btn" id="reelToggle" aria-label="Pause">
+          <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+        </button>
+        <span class="reel-time" id="reelTime">0:00 / 0:50</span>
+        <div class="reel-scrub" id="reelScrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0">
+          <span class="reel-scrub-fill" id="reelScrubFill"></span>
+        </div>
+        <button type="button" class="reel-btn" id="reelMute" aria-label="Mute">
+          <svg class="i-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+          <svg class="i-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m23 9-6 6M17 9l6 6"/></svg>
+        </button>
+        <button type="button" class="reel-btn" id="reelFull" aria-label="Fullscreen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <ol class="reel-chapters" id="reelChapters" aria-label="Chapters">
+      <li><button type="button" class="reel-chapter" data-start="0.0" data-end="3.0" style="--w:3.0">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">01</span>
+        <span class="reel-chapter-name">The Idea</span>
+      </button></li>
+      <li><button type="button" class="reel-chapter" data-start="3.0" data-end="12.8" style="--w:9.8">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">02</span>
+        <span class="reel-chapter-name">The Engineer</span>
+      </button></li>
+      <li><button type="button" class="reel-chapter" data-start="12.8" data-end="22.4" style="--w:9.6">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">03</span>
+        <span class="reel-chapter-name">Design</span>
+      </button></li>
+      <li><button type="button" class="reel-chapter" data-start="22.4" data-end="33.4" style="--w:11.0">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">04</span>
+        <span class="reel-chapter-name">Manufacturing Files</span>
+      </button></li>
+      <li><button type="button" class="reel-chapter" data-start="33.4" data-end="38.8" style="--w:5.4">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">05</span>
+        <span class="reel-chapter-name">Export Formats</span>
+      </button></li>
+      <li><button type="button" class="reel-chapter" data-start="38.8" data-end="43.4" style="--w:4.6">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">06</span>
+        <span class="reel-chapter-name">Renders &amp; Video</span>
+      </button></li>
+      <li><button type="button" class="reel-chapter" data-start="43.4" data-end="50.0" style="--w:6.6">
+        <span class="reel-chapter-track"><span class="reel-chapter-fill"></span></span>
+        <span class="reel-chapter-num">07</span>
+        <span class="reel-chapter-name">Build &amp; Ship</span>
+      </button></li>
+    </ol>
+  </div>
 </section>
 
 <!-- ============ VIDEO SHOWCASE ============ -->
@@ -702,33 +770,6 @@
   <img class="lightbox-img" id="lightboxImg" src="" alt="">
 </div>
 
-<!-- Showreel player: expands out of the hero badge -->
-<div class="reel" id="reel" role="dialog" aria-modal="true" aria-label="Showreel" aria-hidden="true">
-  <div class="reel-grid" aria-hidden="true"></div>
-  <div class="reel-stage">
-    <div class="reel-frame">
-      <span class="reel-corner reel-corner-tl" aria-hidden="true"></span>
-      <span class="reel-corner reel-corner-tr" aria-hidden="true"></span>
-      <span class="reel-corner reel-corner-bl" aria-hidden="true"></span>
-      <span class="reel-corner reel-corner-br" aria-hidden="true"></span>
-      <video class="reel-video" id="reelVideo" data-src="assets/video/showreel.mp4" poster="assets/video/showreel-poster.jpg" playsinline preload="none"></video>
-      <button type="button" class="reel-toggle" id="reelToggle" aria-label="Play">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
-      </button>
-    </div>
-    <div class="reel-bar">
-      <div class="reel-meta">
-        <span class="reel-title">YN<span class="brand-text-accent">&middot;</span>ENGINEER &mdash; Showreel</span>
-        <span class="reel-time" id="reelTime">0:00 / 0:50</span>
-      </div>
-      <div class="reel-progress" id="reelProgress"><span id="reelProgressFill"></span></div>
-    </div>
-  </div>
-  <button type="button" class="reel-close" id="reelClose" aria-label="Close showreel">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-  </button>
-</div>
-
 <a href="https://wa.me/201044284418" target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 448 512" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
 </a>
@@ -741,6 +782,6 @@
 <script src="js/hero3d.js?v=39"></script>
 <script src="js/projects3d.js?v=33"></script>
 <script src="js/main.js?v=39"></script>
-<script src="js/reel.js?v=1"></script>
+<script src="js/reel.js?v=3"></script>
 </body>
 </html>
