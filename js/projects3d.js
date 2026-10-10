@@ -34,11 +34,11 @@
      project; leave it null to show the "coming soon" placeholder.
   ================================================================= */
   const projects = [
-    { title: "Multifunctional Trainer", tag: "Gym Equipment · FEA · DFM", desc: "Full cable-machine engineering with technical drawing set, delivered production-ready.", model: "assets/models/multifunctional-trainer.glb?d=1&v=3" },
-    { title: "Home Cable Machine", tag: "Gym Equipment · Home Fitness", desc: "Compact home-use cable machine engineered for full-body resistance training in a space-saving footprint.", model: "assets/models/home-cable-machine.glb?d=1&v=1" },
-    { title: "Ultimate Leg Machine", tag: "Gym Equipment · Multi-Station", desc: "Full leg-day station combining leg press, hack squat and calf raise into one heavy-duty commercial frame.", model: "assets/models/ultimate-leg-machine.glb?d=1&v=1", yaw: Math.PI },
-    { title: "Linear Leg Press", tag: "Gym Equipment · FEA", desc: "Linear-rail leg press engineered for smooth, guided resistance with a reinforced load-bearing frame.", model: "assets/models/linear-leg-press.glb?d=1&v=1" },
-    { title: "Pediatric Rehabilitation Leg Press", tag: "Medical Devices · Rehabilitation", desc: "Custom-made for a child with muscular atrophy, designed from his own body measurements for a 3 kg working load, with up to 4 kg of extra weight available.", model: "assets/models/pediatric-leg-press.glb?d=1&v=1",
+    { title: "Multifunctional Trainer", tag: "Gym Equipment · FEA · DFM", desc: "Full cable-machine engineering with technical drawing set, delivered production-ready.", model: "assets/models/multifunctional-trainer.glb" },
+    { title: "Home Cable Machine", tag: "Gym Equipment · Home Fitness", desc: "Compact home-use cable machine engineered for full-body resistance training in a space-saving footprint.", model: "assets/models/home-cable-machine.glb" },
+    { title: "Ultimate Leg Machine", tag: "Gym Equipment · Multi-Station", desc: "Full leg-day station combining leg press, hack squat and calf raise into one heavy-duty commercial frame.", model: "assets/models/ultimate-leg-machine.glb", yaw: Math.PI },
+    { title: "Linear Leg Press", tag: "Gym Equipment · FEA", desc: "Linear-rail leg press engineered for smooth, guided resistance with a reinforced load-bearing frame.", model: "assets/models/linear-leg-press.glb" },
+    { title: "Pediatric Rehabilitation Leg Press", tag: "Medical Devices · Rehabilitation", desc: "Custom-made for a child with muscular atrophy, designed from his own body measurements for a 3 kg working load, with up to 4 kg of extra weight available.", model: "assets/models/pediatric-leg-press.glb",
       /* Actual foot plane, found by fitting a plane through ALL FOUR ground-contact
          feet — front pair AND rear pair, spanning nearly the full frame length —
          not a one-camera-angle guess, so it now reads correctly from every orbit
@@ -49,10 +49,10 @@
       partOverrides: [
         { test: /lever|limiter|telescoping/i, color: 0xc4c8d0, metalness: 0.92, roughness: 0.22 }
       ] },
-    { title: "3-in-1 Luxury Baby Mobility", tag: "Baby Mobility · Consumer Products", desc: "Stroller, tricycle and car-seat platform unified into one convertible mobility system.", model: "assets/models/baby-mobility.glb?d=1&v=1" },
-    { title: "Special Dumbbell", tag: "Gym Equipment · Product Design", desc: "Custom-engineered dumbbell with an ergonomic knurled grip and balanced load distribution.", model: "assets/models/special-dumbbell.glb?d=1&v=1", tiltZ: Math.PI / 2 },
+    { title: "3-in-1 Luxury Baby Mobility", tag: "Baby Mobility · Consumer Products", desc: "Stroller, tricycle and car-seat platform unified into one convertible mobility system.", model: "assets/models/baby-mobility.glb" },
+    { title: "Special Dumbbell", tag: "Gym Equipment · Product Design", desc: "Custom-engineered dumbbell with an ergonomic knurled grip and balanced load distribution.", model: "assets/models/special-dumbbell.glb", tiltZ: Math.PI / 2 },
     { title: "Preacher Curl Machine", tag: "Gym Equipment · Product Design", desc: "Isolated bicep-curl station with a pivoting arm and adjustable seat, engineered for a controlled, strict range of motion.",
-      model: "assets/models/preacher-curl-machine.glb?d=1&v=1",
+      model: "assets/models/preacher-curl-machine.glb",
       /* Matches the reference render's finish: safety-yellow powder coat on
          the pivoting arm assembly, charcoal iron frame/seat elsewhere (the
          default "wroughtiron" finish already covers that). */

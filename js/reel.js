@@ -20,7 +20,7 @@
   }
   /* "slow" = don't autoplay anything; a downlink under 0.8 Mbps can't
      keep even the background clips moving, whatever the label says */
-  const slowNet = () => netTier() === "slow" || (!!conn && !!conn.downlink && conn.downlink < 0.8);
+  const slowNet = () => netTier() === "slow";
 
   /* ================================================================
      Showreel — a tiny silent version loops while in view (a moving
@@ -42,7 +42,7 @@
     const scrubFill = document.getElementById("reelScrubFill");
     const timeEl = document.getElementById("reelTime");
     const chapters = [...document.querySelectorAll("#reelChapters .reel-chapter")];
-    const PREVIEW_SRC = video.dataset.preview;
+
     const QUALITIES = [
       { label: "480p", src: video.dataset.src480 },
       { label: "720p", src: video.dataset.src720 },
@@ -58,11 +58,13 @@
     const isPreview = () => player.classList.contains("is-preview");
     const fmt = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 
+    /* Quality from the player's real size on screen (the browser's speed
+       estimate is unreliable): 1080p when it's shown large, else 720p;
+       480p only on data-saver / 2G. The stall watchdog below still steps
+       down by itself if playback keeps freezing. */
     function pickQuality() {
-      const tier = netTier();
-      let q = tier === "slow" || tier === "low" ? 0 : tier === "high" ? 2 : 1;
-      if (player.clientWidth < 700) q = Math.min(q, 1);   // phones: 720p is plenty
-      return q;
+      if (slowNet()) return 0;
+      return player.clientWidth * (window.devicePixelRatio || 1) >= 1100 ? 2 : 1;
     }
 
     function syncQualityLabel() {
@@ -132,7 +134,7 @@
       video.loop = false;
       video.muted = false;
       stalls = [];
-      setSource(QUALITIES[quality].src, at, true);
+      setSource(QUALITIES[quality].src, at, true);   // same file as the preview: no reload
       wakeControls();
     }
 
@@ -141,7 +143,7 @@
       video.loop = true;
       video.muted = true;
       const play = inView && !reduceMotion && !slowNet();
-      setSource(PREVIEW_SRC, 0, play);
+      setSource(QUALITIES[autoQuality ? pickQuality() : quality].src, 0, play);
       if (!play) video.pause();
       syncState();
       syncProgress();
@@ -231,6 +233,15 @@
       else if (isPreview() && !reduceMotion && !slowNet()) video.play().catch(() => {});
     }, { threshold: 0.3 }).observe(player);
 
+    /* preview = the chosen quality itself, starting to buffer before the
+       player scrolls into view */
+    quality = pickQuality();
+    new IntersectionObserver((entries, obs) => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      if (!slowNet()) { video.preload = "auto"; setSource(QUALITIES[quality].src, 0, false); }
+      obs.disconnect();
+    }, { rootMargin: "700px 0px" }).observe(player);
+
     syncQualityLabel();
     syncState();
   }
@@ -272,7 +283,11 @@
         }
       });
     }, { threshold: 0.35 });
+    const early = new IntersectionObserver((entries) => entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting && !slowNet() && !target.src) { target.preload = "auto"; target.src = target.dataset.src; }
+    }), { rootMargin: "600px 0px" });
     clips.forEach((v) => {
+      early.observe(v);
       if (reduceMotion || slowNet()) {
         v.controls = true;
         v.preload = "none";

@@ -68,13 +68,13 @@
      lap) so the floating transition never stalls on a network fetch.
   ================================================================= */
   const MODELS = [
-    "assets/models/multifunctional-trainer.glb?d=1&v=3",
-    "assets/models/home-cable-machine.glb?d=1&v=1",
-    "assets/models/ultimate-leg-machine.glb?d=1&v=1",
-    "assets/models/linear-leg-press.glb?d=1&v=1",
-    "assets/models/pediatric-leg-press.glb?d=1&v=1",
-    "assets/models/baby-mobility.glb?d=1&v=1",
-    "assets/models/special-dumbbell.glb?d=1&v=1"
+    "assets/models/multifunctional-trainer.glb",
+    "assets/models/home-cable-machine.glb",
+    "assets/models/ultimate-leg-machine.glb",
+    "assets/models/linear-leg-press.glb",
+    "assets/models/pediatric-leg-press.glb",
+    "assets/models/baby-mobility.glb",
+    "assets/models/special-dumbbell.glb"
   ];
   /* Per-model presentation corrections — each source file was exported
      from CAD facing whatever direction the designer happened to be

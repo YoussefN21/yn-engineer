@@ -225,6 +225,14 @@
       "assets/images/mfg/fabrication/fab-05.jpg"
     ] }
   };
+  const MEDIA = window.YN_MEDIA || "";
+  /* once the page has loaded, quietly fetch the other tabs' thumbnails so
+     switching tabs shows images immediately */
+  window.addEventListener("load", () => {
+    setTimeout(() => Object.values(MFG_EXAMPLES).forEach(d => d.images.forEach(src => {
+      new Image().src = MEDIA + src.replace(/\.jpg$/, ".webp");
+    })), 1500);
+  });
   const mfgCards = document.getElementById("mfgCards");
   const mfgGallery = document.getElementById("mfgGallery");
   const mfgGalleryTitle = document.getElementById("mfgGalleryTitle");
@@ -235,7 +243,7 @@
     mfgGalleryTitle.textContent = data.title;
     if (data.images.length) {
       mfgGalleryGrid.innerHTML = data.images
-        .map(src => `<div class="mfg-gallery-item"><img src="${src.replace(/\.jpg$/, ".webp")}" data-full="${src}" alt="${data.title}" loading="lazy" decoding="async"></div>`)
+        .map(src => `<div class="mfg-gallery-item"><img src="${MEDIA}${src.replace(/\.jpg$/, ".webp")}" data-full="${MEDIA}${src}" alt="${data.title}" loading="lazy" decoding="async"></div>`)
         .join("");
     } else {
       mfgGalleryGrid.innerHTML = Array.from({ length: 3 }).map(() => `
@@ -303,29 +311,29 @@
   ================================================================= */
   const showcaseVideo = document.getElementById("showcaseVideo");
   const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const slowConnection = !!netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || "") || (netConn.downlink > 0 && netConn.downlink < 0.8));
-  /* Three encodes of the same clip: a light one for phones and weak
-     connections, 720p for most desktops, 1080p only when the connection
-     is clearly fast. Slow / data-saver connections just keep the poster. */
+    /* Three encodes of the same clip. Desktops get 1080p, phones and
+     smaller windows 720p; the light version only on data-saver / 2G.
+     (The browser's speed estimate is too unreliable to pick quality on.) */
   function showcaseSource() {
     const d = showcaseVideo.dataset;
     const phone = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
-    const downlink = netConn && netConn.downlink;
-    if (phone || (netConn && (netConn.effectiveType === "3g" || (downlink && downlink < 2.5)))) return d.srcLight;
-    if (downlink >= 8 && window.innerWidth >= 1200) return d.src1080;
-    return d.src720;
+    if (netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || ""))) return d.srcLight;
+    return !phone && window.innerWidth >= 1100 ? d.src1080 : d.src720;
   }
-  if (showcaseVideo && slowConnection) {
-    /* nothing to load; the poster image stays */
-  } else if (showcaseVideo) {
+  const veryslow = !!netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || ""));
+  if (showcaseVideo && !veryslow) {
+    /* start buffering well before it scrolls into view... */
+    new IntersectionObserver((entries, obs) => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      showcaseVideo.preload = "auto";
+      showcaseVideo.src = showcaseSource();
+      obs.disconnect();
+    }, { rootMargin: "900px 0px" }).observe(showcaseVideo);
+    /* ...and only play while it's actually visible */
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (!showcaseVideo.getAttribute("src")) showcaseVideo.src = showcaseSource();
-          showcaseVideo.play().catch(() => {});
-        } else {
-          showcaseVideo.pause();
-        }
+        if (entry.isIntersecting && showcaseVideo.getAttribute("src")) showcaseVideo.play().catch(() => {});
+        else showcaseVideo.pause();
       });
     }, { threshold: 0.15 }).observe(showcaseVideo);
   }
@@ -377,6 +385,9 @@
     window.addEventListener("resize", () => goTo(index));
   }
 
+  window.addEventListener("load", () => {
+    setTimeout(() => document.querySelectorAll(".render-slide, img.shopfloor-slide").forEach(img => { img.loading = "eager"; }), 1000);
+  });
   initSlider("renderSlider", ".render-slider-track", ".render-slide", "renderPrev", "renderNext");
   initSlider("shopfloorSlider", ".shopfloor-slider-track", ".shopfloor-slide", "shopfloorPrev", "shopfloorNext");
 

@@ -278,6 +278,17 @@
       }
       loader.setDRACOLoader(dracoLoader);
     }
+    /* Models are fetched from the media CDN (see window.YN_MEDIA in
+       index.html); if that request fails, retry from this site. */
+    const base = window.YN_MEDIA || "";
+    const load = loader.load.bind(loader);
+    loader.load = (url, onLoad, onProgress, onError) => {
+      const cdnUrl = base && url.startsWith("assets/") ? base + url : url;
+      load(cdnUrl, onLoad, onProgress, (err) => {
+        if (cdnUrl !== url) load(url, onLoad, onProgress, onError);
+        else if (onError) onError(err);
+      });
+    };
     return loader;
   }
 

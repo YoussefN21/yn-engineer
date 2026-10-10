@@ -9,6 +9,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script>
+  /* Media (images, videos, 3D models) is served by jsDelivr straight from
+     this site's GitHub repo, pinned to a commit: GitHub Pages delivers
+     large files very slowly to visitors in Egypt and the Gulf (~70 KB/s
+     measured, vs 1-2 MB/s from jsDelivr). If the CDN ever fails, any
+     image/video falls back to the copy on this site.
+     After adding or changing media: commit + push it, then put that
+     commit's hash in YN_MEDIA (and in the src/poster URLs below). */
+  window.YN_MEDIA = "https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/";
+  document.addEventListener("error", function (e) {
+    var el = e.target, base = window.YN_MEDIA;
+    if (!el || (el.tagName !== "IMG" && el.tagName !== "VIDEO")) return;
+    var src = el.getAttribute("src") || "";
+    if (src.indexOf(base) === 0) el.src = src.slice(base.length);
+  }, true);
+</script>
 <link rel="stylesheet" href="css/style.css?v=13">
 </head>
 <body>
@@ -17,7 +34,7 @@
 
 <!-- ============ PRELOADER ============ -->
 <div class="preloader" id="preloader">
-  <img src="assets/images/logo-white.png" alt="YN Engineer" class="preloader-logo" id="preloaderLogo">
+  <img src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/logo-white.png" alt="YN Engineer" class="preloader-logo" id="preloaderLogo">
 </div>
 
 <!-- ============ CURSOR ============ -->
@@ -27,7 +44,7 @@
 <header class="nav" id="nav">
   <div class="nav-inner container">
     <a href="#home" class="brand">
-      <img src="assets/images/logo-dark.png" alt="YN Engineer logo" class="brand-logo">
+      <img src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/logo-dark.png" alt="YN Engineer logo" class="brand-logo">
       <span class="brand-text">YN<span class="brand-text-accent">·</span>ENGINEER</span>
     </a>
     <nav class="nav-links" id="navLinks">
@@ -56,7 +73,7 @@
   <div class="hero-inner">
     <div class="hero-copy">
       <div class="hero-identity">
-        <img src="assets/images/profile-square.webp" alt="Youssef Hesham Nasr" class="hero-avatar" width="280" height="280" fetchpriority="high">
+        <img src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/profile-square.webp" alt="Youssef Hesham Nasr" class="hero-avatar" width="280" height="280" fetchpriority="high">
         <div class="hero-identity-text">
           <p class="eyebrow">R&amp;D Mechanical Design Engineer</p>
           <h1 class="hero-title">Youssef Hesham<br>Nasr</h1>
@@ -93,7 +110,7 @@
     </div>
 
     <div class="reel-player is-preview" id="reelPlayer">
-      <video class="reel-video" id="reelVideo" src="assets/video/showreel-preview.mp4" data-preview="assets/video/showreel-preview.mp4" data-src480="assets/video/showreel-480.mp4" data-src720="assets/video/showreel-720.mp4" data-src1080="assets/video/showreel-1080.mp4" poster="assets/video/showreel-poster.webp" muted loop playsinline preload="none"></video>
+      <video class="reel-video" id="reelVideo" data-src480="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-480.mp4" data-src720="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-720.mp4" data-src1080="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-1080.mp4" poster="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-poster.webp" muted loop playsinline preload="none"></video>
 
       <button type="button" class="reel-start" id="reelStart" aria-label="Watch the showreel with sound">
         <span class="reel-start-icon" aria-hidden="true">
@@ -165,7 +182,7 @@
 
 <!-- ============ VIDEO SHOWCASE ============ -->
 <section class="showcase" id="showcase">
-  <video class="showcase-media" id="showcaseVideo" data-src-light="assets/video/ultimate-leg-machine-web.mp4?v=3" data-src720="assets/video/ultimate-leg-machine-720.mp4" data-src1080="assets/video/ultimate-leg-machine-1080.mp4" poster="assets/video/ultimate-leg-machine-poster.webp" muted loop playsinline preload="none"></video>
+  <video class="showcase-media" id="showcaseVideo" data-src-light="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/ultimate-leg-machine-web.mp4" data-src720="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/ultimate-leg-machine-720.mp4" data-src1080="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/ultimate-leg-machine-1080.mp4" poster="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/ultimate-leg-machine-poster.webp" muted loop playsinline preload="none"></video>
   <div class="showcase-vignette"></div>
   <div class="showcase-spot"></div>
   <div class="showcase-copy container reveal">
@@ -343,9 +360,9 @@
           <p class="shopfloor-inline-title">Featured Shop Floor &mdash; El-Nesr For Sheet Metal Cutting</p>
           <div class="shopfloor-slider" id="shopfloorSlider">
             <div class="shopfloor-slider-track">
-              <img class="shopfloor-slide" src="assets/images/shopfloor/elnesr-cutting.webp" alt="CNC plasma cutting sparks — El-Nesr shop floor" loading="lazy">
-              <img class="shopfloor-slide" src="assets/images/shopfloor/elnesr-parts.webp" alt="Finished cut sheet-metal parts — El-Nesr shop floor" loading="lazy">
-              <video class="shopfloor-slide" id="shopfloorVideo" data-src="assets/video/elnesr-cnc.mp4?v=2" poster="assets/video/elnesr-cnc-poster.webp" controls playsinline preload="none"></video>
+              <img class="shopfloor-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/shopfloor/elnesr-cutting.webp" alt="CNC plasma cutting sparks — El-Nesr shop floor" loading="lazy">
+              <img class="shopfloor-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/shopfloor/elnesr-parts.webp" alt="Finished cut sheet-metal parts — El-Nesr shop floor" loading="lazy">
+              <video class="shopfloor-slide" id="shopfloorVideo" data-src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/elnesr-cnc.mp4" poster="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/elnesr-cnc-poster.webp" controls playsinline preload="none"></video>
             </div>
             <button type="button" class="shopfloor-arrow shopfloor-arrow-prev" id="shopfloorPrev" aria-label="Previous">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
@@ -484,15 +501,15 @@
       <div class="render-banner-visual">
         <div class="render-slider" id="renderSlider">
           <div class="render-slider-track">
-            <img class="render-slide" src="assets/images/renders/keyshot-leg-press.webp" alt="Iso-lateral leg press — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-functional-trainer.webp" alt="Functional trainer rack — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-preacher-curl.webp" alt="Preacher curl machine — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-render-04.webp" alt="Ultimate leg machine — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-render-05.webp" alt="Leg extension / preacher station — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-render-06.webp" alt="EXE functional trainer tower — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-render-07.webp" alt="Feronik 10kg dumbbell — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-render-08.webp" alt="Feronik 20kg weight plate — KeyShot render" loading="lazy">
-            <img class="render-slide" src="assets/images/renders/keyshot-render-09.webp" alt="3-in-1 baby mobility trike — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-leg-press.webp" alt="Iso-lateral leg press — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-functional-trainer.webp" alt="Functional trainer rack — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-preacher-curl.webp" alt="Preacher curl machine — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-render-04.webp" alt="Ultimate leg machine — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-render-05.webp" alt="Leg extension / preacher station — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-render-06.webp" alt="EXE functional trainer tower — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-render-07.webp" alt="Feronik 10kg dumbbell — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-render-08.webp" alt="Feronik 20kg weight plate — KeyShot render" loading="lazy">
+            <img class="render-slide" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/renders/keyshot-render-09.webp" alt="3-in-1 baby mobility trike — KeyShot render" loading="lazy">
           </div>
           <button type="button" class="render-arrow render-arrow-prev" id="renderPrev" aria-label="Previous render">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
@@ -607,9 +624,9 @@
 
     <div class="build-grid reveal">
       <div class="compare" id="buildCompare" style="--pos:50%">
-        <img class="compare-img" src="assets/images/build/pediatric-leg-press-real.webp" alt="Manufactured Pediatric Rehabilitation Leg Press on the workshop floor" width="638" height="769" loading="lazy">
+        <img class="compare-img" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/build/pediatric-leg-press-real.webp" alt="Manufactured Pediatric Rehabilitation Leg Press on the workshop floor" width="638" height="769" loading="lazy">
         <div class="compare-top">
-          <img class="compare-img" src="assets/images/build/pediatric-leg-press-cad.webp" alt="CAD render of the Pediatric Rehabilitation Leg Press" width="638" height="769" loading="lazy">
+          <img class="compare-img" src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/build/pediatric-leg-press-cad.webp" alt="CAD render of the Pediatric Rehabilitation Leg Press" width="638" height="769" loading="lazy">
         </div>
         <span class="compare-label compare-label-cad">CAD render</span>
         <span class="compare-label compare-label-real">Manufactured</span>
@@ -673,19 +690,19 @@
     <div class="build-process">
       <figure class="build-media reveal">
         <div class="build-media-frame">
-          <video class="build-video" data-src="assets/video/build-laser-cutting.mp4?v=2" poster="assets/video/build-laser-cutting-poster.webp" muted loop playsinline preload="none" aria-label="CNC laser cutting a part"></video>
+          <video class="build-video" data-src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/build-laser-cutting.mp4" poster="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/build-laser-cutting-poster.webp" muted loop playsinline preload="none" aria-label="CNC laser cutting a part"></video>
         </div>
         <figcaption><span>01</span> Laser cutting</figcaption>
       </figure>
       <figure class="build-media reveal">
         <div class="build-media-frame">
-          <img src="assets/images/build/powder-coating.webp" alt="Machine parts hanging in the powder-coating booth" width="1280" height="960" loading="lazy">
+          <img src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/build/powder-coating.webp" alt="Machine parts hanging in the powder-coating booth" width="1280" height="960" loading="lazy">
         </div>
         <figcaption><span>02</span> Powder coating</figcaption>
       </figure>
       <figure class="build-media reveal">
         <div class="build-media-frame">
-          <video class="build-video" data-src="assets/video/build-cad-to-real.mp4?v=2" poster="assets/video/build-cad-to-real-poster.webp" muted loop playsinline preload="none" aria-label="The CAD model on a laptop, then the finished machine behind it"></video>
+          <video class="build-video" data-src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/build-cad-to-real.mp4" poster="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/build-cad-to-real-poster.webp" muted loop playsinline preload="none" aria-label="The CAD model on a laptop, then the finished machine behind it"></video>
         </div>
         <figcaption><span>03</span> From screen to shop floor</figcaption>
       </figure>
@@ -748,7 +765,7 @@
 <footer class="footer">
   <div class="container footer-inner">
     <a href="#home" class="brand brand-footer">
-      <img src="assets/images/logo-white.png" alt="YN Engineer logo" class="brand-logo">
+      <img src="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/images/logo-white.png" alt="YN Engineer logo" class="brand-logo">
       <span class="brand-text">YN<span class="brand-text-accent">·</span>ENGINEER</span>
     </a>
     <p class="footer-tagline">R&amp;D Mechanical Design Engineer &mdash; CAD &middot; FEA &middot; DFM &middot; Manufacturing Files</p>
@@ -780,10 +797,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
-<script src="js/three-common.js?v=12"></script>
-<script src="js/hero3d.js?v=42"></script>
-<script src="js/projects3d.js?v=36"></script>
-<script src="js/main.js?v=42"></script>
-<script src="js/reel.js?v=5"></script>
+<script src="js/three-common.js?v=13"></script>
+<script src="js/hero3d.js?v=43"></script>
+<script src="js/projects3d.js?v=37"></script>
+<script src="js/main.js?v=43"></script>
+<script src="js/reel.js?v=6"></script>
 </body>
 </html>
