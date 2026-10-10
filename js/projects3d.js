@@ -71,8 +71,8 @@
   let width = canvas.clientWidth, height = canvas.clientHeight;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); // 2x+ screens: same look, far fewer pixels to shade
   renderer.setSize(width, height, false);
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -293,6 +293,7 @@
 
   const clock = new THREE.Clock();
   let lastFrameTime = null;
+  const loop = YN3D.throttledLoop(() => render());
   function render() {
     const t = clock.getElapsedTime();
     const dt = lastFrameTime === null ? 0 : Math.min(t - lastFrameTime, 0.1);
@@ -333,7 +334,7 @@
     goTo(0);
     new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        renderer.setAnimationLoop(entry.isIntersecting ? render : null);
+        renderer.setAnimationLoop(entry.isIntersecting ? loop : null);
       });
     }, { threshold: 0 }).observe(stage);
   }

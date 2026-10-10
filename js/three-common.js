@@ -281,6 +281,23 @@
     return loader;
   }
 
+  /* Frame limiter for the render loops. Both scenes animate from elapsed
+     time, so skipping frames never changes their speed. While the visitor
+     is scrolling (and always on phones / low-core devices) they draw at
+     ~30 fps, leaving the main thread free so scrolling itself stays smooth. */
+  let lastScroll = 0;
+  window.addEventListener("scroll", () => { lastScroll = performance.now(); }, { passive: true });
+  const lowPower = window.matchMedia("(pointer: coarse)").matches || (navigator.hardwareConcurrency || 8) <= 4;
+  function throttledLoop(render) {
+    let last = 0;
+    return (t) => {
+      const busy = lowPower || performance.now() - lastScroll < 250;
+      if (busy && t - last < 32) return;
+      last = t;
+      render();
+    };
+  }
+
   window.YN3D = {
     srgb,
     buildEnvironment,
@@ -289,6 +306,7 @@
     applyFinishes,
     normalizeModel,
     fitCameraToRadius,
-    makeGLTFLoader
+    makeGLTFLoader,
+    throttledLoop
   };
 })();

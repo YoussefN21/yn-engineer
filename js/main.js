@@ -304,13 +304,24 @@
   const showcaseVideo = document.getElementById("showcaseVideo");
   const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   const slowConnection = !!netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || "") || (netConn.downlink > 0 && netConn.downlink < 0.8));
+  /* Three encodes of the same clip: a light one for phones and weak
+     connections, 720p for most desktops, 1080p only when the connection
+     is clearly fast. Slow / data-saver connections just keep the poster. */
+  function showcaseSource() {
+    const d = showcaseVideo.dataset;
+    const phone = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
+    const downlink = netConn && netConn.downlink;
+    if (phone || (netConn && (netConn.effectiveType === "3g" || (downlink && downlink < 2.5)))) return d.srcLight;
+    if (downlink >= 8 && window.innerWidth >= 1200) return d.src1080;
+    return d.src720;
+  }
   if (showcaseVideo && slowConnection) {
-    showcaseVideo.removeAttribute("src");   // keep just the poster image
+    /* nothing to load; the poster image stays */
   } else if (showcaseVideo) {
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          if (!showcaseVideo.src && showcaseVideo.dataset.src) showcaseVideo.src = showcaseVideo.dataset.src;
+          if (!showcaseVideo.getAttribute("src")) showcaseVideo.src = showcaseSource();
           showcaseVideo.play().catch(() => {});
         } else {
           showcaseVideo.pause();
