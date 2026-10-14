@@ -4,8 +4,74 @@
     {
       "name": "site",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "-l", "5173", "."],
+      "runtimeArgs": [
+        "--yes",
+        "serve",
+        "-l",
+        "5173",
+        "."
+      ],
       "port": 5173
+    },
+    {
+      "name": "fiverr-video",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "E:/Business/FiverrVideo/video",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3000",
+        "--no-open"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "gig2-video",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "E:/Business/FiverrVideo/Gig2/video",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3001",
+        "--no-open"
+      ],
+      "port": 3001
+    },
+    {
+      "name": "gig3-video",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "E:/Business/FiverrVideo/Gig3/video",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3002",
+        "--no-open"
+      ],
+      "port": 3002
+    },
+    {
+      "name": "gig4-video",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "E:/Business/FiverrVideo/Gig4/video",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "3003",
+        "--no-open"
+      ],
+      "port": 3003
     }
   ]
 }
