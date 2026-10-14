@@ -46,7 +46,7 @@
     if (src.indexOf(base) === 0) el.src = src.slice(base.length);
   }, true);
 </script>
-<link rel="stylesheet" href="css/style.css?v=13">
+<link rel="stylesheet" href="css/style.css?v=14">
 </head>
 <body>
 
@@ -123,21 +123,47 @@
   <div class="container">
     <div class="reel-head reveal">
       <div>
-        <p class="section-kicker">Showreel &middot; 0:50</p>
-        <h2 class="section-title">From idea to machine,<br>in 50 seconds.</h2>
+        <p class="section-kicker">Showreel &middot; 4 services</p>
+        <h2 class="section-title">Watch the work,<br>service by service.</h2>
       </div>
-      <p class="section-sub">How I take a gym machine from the first sketch to 3D design, manufacturing files and a finished build.</p>
+      <p class="section-sub">One short film for each service I offer, with the deliverables you actually receive.</p>
+    </div>
+
+    <!-- One tab per Fiverr gig. Each tab swaps the film in the player below
+         and shows that gig's gallery. data-video is the file name without
+         "-480/-720/-1080.mp4"; paths are relative to YN_MEDIA. -->
+    <div class="gig-tabs" id="gigTabs" role="tablist" aria-label="Services">
+      <button type="button" class="gig-tab" role="tab" id="gigTab1" aria-controls="gigPanel1" aria-selected="true"
+              data-video="assets/video/showreel" data-poster="assets/video/showreel-poster.webp" data-duration="50" data-chapters="true">
+        <span class="gig-tab-num">01</span>
+        <span class="gig-tab-name">Design to Build</span>
+      </button>
+      <button type="button" class="gig-tab" role="tab" id="gigTab2" aria-controls="gigPanel2" aria-selected="false" tabindex="-1"
+              data-video="assets/gigs/gig2/promo" data-poster="assets/gigs/gig2/poster.webp">
+        <span class="gig-tab-num">02</span>
+        <span class="gig-tab-name">3D Modeling &amp; Drawings</span>
+      </button>
+      <button type="button" class="gig-tab" role="tab" id="gigTab3" aria-controls="gigPanel3" aria-selected="false" tabindex="-1"
+              data-video="assets/gigs/gig3/promo" data-poster="assets/gigs/gig3/poster.webp" data-duration="49">
+        <span class="gig-tab-num">03</span>
+        <span class="gig-tab-name">Sheet Metal &amp; DXF</span>
+      </button>
+      <button type="button" class="gig-tab" role="tab" id="gigTab4" aria-controls="gigPanel4" aria-selected="false" tabindex="-1"
+              data-video="assets/gigs/gig4/promo" data-poster="assets/gigs/gig4/poster.webp" data-duration="28">
+        <span class="gig-tab-num">04</span>
+        <span class="gig-tab-name">Gym Products</span>
+      </button>
     </div>
 
     <div class="reel-player is-preview" id="reelPlayer">
       <video class="reel-video" id="reelVideo" data-src480="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-480.mp4" data-src720="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-720.mp4" data-src1080="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-1080.mp4" poster="https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@c72e4b3bef1efec29aedb69ddff57101d7f4d253/assets/video/showreel-poster.webp" muted loop playsinline preload="none"></video>
 
-      <button type="button" class="reel-start" id="reelStart" aria-label="Watch the showreel with sound">
+      <button type="button" class="reel-start" id="reelStart" aria-label="Watch this film with sound">
         <span class="reel-start-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
         </span>
         <span class="reel-start-label">Watch with sound</span>
-        <span class="reel-start-time">0:50</span>
+        <span class="reel-start-time" id="reelStartTime">0:50</span>
       </button>
 
       <div class="reel-controls" id="reelControls">
@@ -197,6 +223,77 @@
         <span class="reel-chapter-name">Build &amp; Ship</span>
       </button></li>
     </ol>
+
+    <!-- Gig panels: thumbnails load (data-thumb) only when their tab is
+         opened; clicking one opens the full image (data-full) in the
+         lightbox, with arrows through that gig's three images. -->
+    <div class="gig-panel" role="tabpanel" id="gigPanel1" aria-labelledby="gigTab1">
+      <div class="gig-copy">
+        <h3 class="gig-title">Gym equipment, from 3D design to a built machine.</h3>
+        <p class="gig-text">Commercial gym machines engineered in SOLIDWORKS and checked with FEA, then delivered as manufacturing files. Need the machine itself? I can build it and ship it to you.</p>
+        <ul class="gig-chips" aria-label="Deliverables">
+          <li>3D CAD</li><li>FEA</li><li>DFM / DFA</li><li>.DXF</li><li>.IGES</li><li>.PDF</li>
+        </ul>
+        <!-- Replace with this gig's own Fiverr link -->
+        <a href="https://www.fiverr.com/s/mmxZLdb" target="_blank" rel="noopener" class="btn btn-primary btn-sm gig-cta">Order on Fiverr &rarr;</a>
+      </div>
+      <div class="gig-shots" data-lightbox-group>
+        <button type="button" class="gig-shot"><img alt="From design to manufacturing: 3D design, manufacturing files, built and shipped to Dubai" data-thumb="assets/gigs/gig1/gallery-1-thumb.webp" data-full="assets/gigs/gig1/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Commercial gym equipment design: 3D CAD, FEA frame stress study, DFM and DFA" data-thumb="assets/gigs/gig1/gallery-2-thumb.webp" data-full="assets/gigs/gig1/gallery-2.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Manufacturing-ready files: DXF flat patterns for sheet-metal laser, IGES for rotary pipe laser, PDF drawings" data-thumb="assets/gigs/gig1/gallery-3-thumb.webp" data-full="assets/gigs/gig1/gallery-3.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+      </div>
+    </div>
+
+    <div class="gig-panel" role="tabpanel" id="gigPanel2" aria-labelledby="gigTab2" hidden>
+      <div class="gig-copy">
+        <h3 class="gig-title">Rapid SOLIDWORKS 3D modeling and drawings.</h3>
+        <p class="gig-text">Send a sketch, a photo or an existing part. You get a clean parametric model, 2D technical drawings, assemblies, exploded views and a BOM.</p>
+        <ul class="gig-chips" aria-label="Deliverables">
+          <li>.SLDPRT</li><li>.STEP</li><li>.IGES</li><li>.DXF</li><li>.PDF</li><li>BOM</li>
+        </ul>
+        <!-- Replace with this gig's own Fiverr link -->
+        <a href="https://www.fiverr.com/s/mmxZLdb" target="_blank" rel="noopener" class="btn btn-primary btn-sm gig-cta">Order on Fiverr &rarr;</a>
+      </div>
+      <div class="gig-shots" data-lightbox-group>
+        <button type="button" class="gig-shot"><img alt="From a client sketch to a SOLIDWORKS 3D model and a technical drawing" data-thumb="assets/gigs/gig2/gallery-1-thumb.webp" data-full="assets/gigs/gig2/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Rapid SOLIDWORKS 3D modeling and drawings: a family of parts with PDF drawing sheets" data-thumb="assets/gigs/gig2/gallery-2-thumb.webp" data-full="assets/gigs/gig2/gallery-2.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Jaw trainer assembly: 12-part exploded view with a bill of materials and finishes" data-thumb="assets/gigs/gig2/gallery-3-thumb.webp" data-full="assets/gigs/gig2/gallery-3.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+      </div>
+    </div>
+
+    <div class="gig-panel" role="tabpanel" id="gigPanel3" aria-labelledby="gigTab3" hidden>
+      <div class="gig-copy">
+        <h3 class="gig-title">Sheet metal parts, reverse engineered and laser-ready.</h3>
+        <p class="gig-text">From a photo of an old part to a DXF your laser can cut the same day: closed contours, true arcs, flat patterns with bend lines and K-factor, nested on your sheet size.</p>
+        <ul class="gig-chips" aria-label="Deliverables">
+          <li>CSWP Sheet Metal</li><li>.DXF</li><li>.SLDPRT</li><li>.STEP</li><li>.PDF</li><li>Nesting</li>
+        </ul>
+        <!-- Replace with this gig's own Fiverr link -->
+        <a href="https://www.fiverr.com/s/mmxZLdb" target="_blank" rel="noopener" class="btn btn-primary btn-sm gig-cta">Order on Fiverr &rarr;</a>
+      </div>
+      <div class="gig-shots" data-lightbox-group>
+        <button type="button" class="gig-shot"><img alt="Sheet metal part design and flat pattern for laser cutting" data-thumb="assets/gigs/gig3/gallery-1-thumb.webp" data-full="assets/gigs/gig3/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="From a photo of an old flange to a laser-ready DXF with closed contours and true circles" data-thumb="assets/gigs/gig3/gallery-2-thumb.webp" data-full="assets/gigs/gig3/gallery-2.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Nested, cut and ready to build: nested DXF on a 5 mm plate, laser cutting and the finished part" data-thumb="assets/gigs/gig3/gallery-3-thumb.webp" data-full="assets/gigs/gig3/gallery-3.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+      </div>
+    </div>
+
+    <div class="gig-panel" role="tabpanel" id="gigPanel4" aria-labelledby="gigTab4" hidden>
+      <div class="gig-copy">
+        <h3 class="gig-title">Dumbbells, kettlebells and weight plates.</h3>
+        <p class="gig-text">3D CAD and design for manufacturing of free weights, handles and cable attachments, with your branding, exploded views, BOMs and drawings ready for the factory.</p>
+        <ul class="gig-chips" aria-label="Deliverables">
+          <li>3D CAD</li><li>DFM / DFA</li><li>BOM</li><li>.SLDPRT</li><li>.STEP</li><li>.PDF</li>
+        </ul>
+        <!-- Replace with this gig's own Fiverr link -->
+        <a href="https://www.fiverr.com/s/mmxZLdb" target="_blank" rel="noopener" class="btn btn-primary btn-sm gig-cta">Order on Fiverr &rarr;</a>
+      </div>
+      <div class="gig-shots" data-lightbox-group>
+        <button type="button" class="gig-shot"><img alt="FERONIK dumbbells, kettlebells and weight plates: 3D CAD, DFM, DFA and FEA" data-thumb="assets/gigs/gig4/gallery-1-thumb.webp" data-full="assets/gigs/gig4/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Designed for manufacturing: FERONIK 10 kg dumbbell exploded view with a bill of materials" data-thumb="assets/gigs/gig4/gallery-2-thumb.webp" data-full="assets/gigs/gig4/gallery-2.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Handles, grips and cable attachments with PDF drawings" data-thumb="assets/gigs/gig4/gallery-3-thumb.webp" data-full="assets/gigs/gig4/gallery-3.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -506,7 +603,7 @@
 
       <div class="mfg-gallery" id="mfgGallery">
         <h4 id="mfgGalleryTitle">&nbsp;</h4>
-        <div class="mfg-gallery-grid" id="mfgGalleryGrid"></div>
+        <div class="mfg-gallery-grid" id="mfgGalleryGrid" data-lightbox-group></div>
       </div>
     </div>
 
@@ -805,7 +902,16 @@
   <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
-  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button type="button" class="lightbox-arrow lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <figure class="lightbox-figure">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <figcaption class="lightbox-caption" id="lightboxCaption"></figcaption>
+  </figure>
+  <button type="button" class="lightbox-arrow lightbox-next" id="lightboxNext" aria-label="Next image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
 </div>
 
 <a href="https://wa.me/201044284418" target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
@@ -820,7 +926,7 @@
 <script src="js/three-common.js?v=13"></script>
 <script src="js/hero3d.js?v=43"></script>
 <script src="js/projects3d.js?v=37"></script>
-<script src="js/main.js?v=43"></script>
-<script src="js/reel.js?v=6"></script>
+<script src="js/main.js?v=44"></script>
+<script src="js/reel.js?v=7"></script>
 </body>
 </html>

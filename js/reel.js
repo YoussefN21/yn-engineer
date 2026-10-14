@@ -48,6 +48,11 @@
       { label: "720p", src: video.dataset.src720 },
       { label: "1080p", src: video.dataset.src1080 }
     ];
+    const MEDIA = window.YN_MEDIA || "";
+    const gigTabs = [...document.querySelectorAll("#gigTabs .gig-tab")];
+    const chapterStrip = document.getElementById("reelChapters");
+    const startTimeEl = document.getElementById("reelStartTime");
+    let fallbackDuration = 50;
     let quality = 1;
     let autoQuality = true;
     let inView = false;
@@ -105,7 +110,7 @@
 
     function syncProgress() {
       const t = video.currentTime;
-      const d = video.duration || 50;
+      const d = video.duration || fallbackDuration || 1;
       scrubFill.style.transform = `scaleX(${t / d})`;
       timeEl.textContent = `${fmt(t)} / ${fmt(d)}`;
       scrub.setAttribute("aria-valuenow", Math.round(t));
@@ -180,8 +185,88 @@
     function seekFromEvent(e) {
       const r = scrub.getBoundingClientRect();
       const x = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
-      video.currentTime = x * (video.duration || 50);
+      video.currentTime = x * (video.duration || fallbackDuration || 1);
     }
+
+    /* ---------------------------------------------------------------
+       Gig tabs — one film per Fiverr gig in the same player. A tab
+       swaps the 480/720/1080 files, poster, chapter strip and the gig
+       panel below. Switching while watching with sound starts the new
+       film with sound; otherwise its silent preview loops instead.
+    ---------------------------------------------------------------- */
+    function useGig(tab) {
+      const base = MEDIA + tab.dataset.video;
+      QUALITIES[0].src = `${base}-480.mp4`;
+      QUALITIES[1].src = `${base}-720.mp4`;
+      QUALITIES[2].src = `${base}-1080.mp4`;
+      video.poster = MEDIA + tab.dataset.poster;
+      fallbackDuration = +tab.dataset.duration || 0;
+      startTimeEl.textContent = fallbackDuration ? fmt(fallbackDuration) : "";
+      startTimeEl.hidden = !fallbackDuration;
+      if (chapterStrip) chapterStrip.hidden = !tab.dataset.chapters;
+    }
+
+    function loadGigThumbs(panel) {
+      panel.querySelectorAll("img[data-thumb]").forEach((img) => {
+        if (img.getAttribute("src")) return;
+        img.dataset.full = MEDIA + img.dataset.full;
+        img.src = MEDIA + img.dataset.thumb;
+      });
+    }
+
+    function selectGig(tab, focus) {
+      if (focus) tab.focus();
+      if (tab.getAttribute("aria-selected") === "true") return;
+      const watching = !isPreview();
+      gigTabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute("aria-controls"));
+        panel.hidden = !on;
+        if (on) loadGigThumbs(panel);
+      });
+      /* phones: the tab row scrolls sideways; keep the chosen tab in view */
+      const row = tab.parentElement;
+      if (row.scrollWidth > row.clientWidth) {
+        row.scrollTo({ left: tab.offsetLeft - row.offsetLeft - 20, behavior: "smooth" });
+      }
+      useGig(tab);
+      if (watching) enterFull(0);
+      else backToPreview();
+    }
+
+    if (gigTabs.length) {
+      gigTabs.forEach((tab, i) => {
+        tab.addEventListener("click", () => selectGig(tab));
+        tab.addEventListener("keydown", (e) => {
+          let next = null;
+          if (e.key === "ArrowRight") next = gigTabs[(i + 1) % gigTabs.length];
+          if (e.key === "ArrowLeft") next = gigTabs[(i - 1 + gigTabs.length) % gigTabs.length];
+          if (e.key === "Home") next = gigTabs[0];
+          if (e.key === "End") next = gigTabs[gigTabs.length - 1];
+          if (next) { e.preventDefault(); selectGig(next, true); }
+        });
+      });
+      const first = gigTabs.find((t) => t.getAttribute("aria-selected") === "true") || gigTabs[0];
+      useGig(first);
+      loadGigThumbs(document.getElementById(first.getAttribute("aria-controls")));
+      /* once the page has settled, fetch the other gigs' thumbnails so
+         switching tabs shows the gallery straight away */
+      window.addEventListener("load", () => setTimeout(() => {
+        document.querySelectorAll(".gig-panel img[data-thumb]").forEach((img) => {
+          if (!img.getAttribute("src")) new Image().src = MEDIA + img.dataset.thumb;
+        });
+      }, 2500));
+    }
+
+    /* the real length, once known (covers gigs without data-duration) */
+    video.addEventListener("loadedmetadata", () => {
+      if (!video.duration || !isFinite(video.duration)) return;
+      startTimeEl.textContent = fmt(video.duration);
+      startTimeEl.hidden = false;
+      scrub.setAttribute("aria-valuemax", Math.round(video.duration));
+    });
 
     startBtn.addEventListener("click", () => enterFull(0));
     toggleBtn.addEventListener("click", () => (video.paused ? video.play() : video.pause()));

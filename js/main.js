@@ -94,6 +94,239 @@
   }
 
   /* ================================================================
+     Manufacturing-file examples — DXF's selected work is pinned under
+     the buttons from the moment the page loads (no click needed); pick
+     a different button and its examples swap in instead. Drop real
+     photos into assets/images/manufacturing/ and list their filenames
+     below; until then each service shows placeholder tiles instead of
+     a broken image or a stock photo standing in for real work.
+  ================================================================= */
+  const MFG_EXAMPLES = {
+    dxf: { title: "DXF — Sheet-Metal CNC Laser Cut: selected work", images: [
+      "assets/images/mfg/dxf/dxf-02.jpg",
+      "assets/images/mfg/dxf/dxf-03.jpg",
+      "assets/images/mfg/dxf/dxf-04.jpg",
+      "assets/images/mfg/dxf/dxf-05.jpg",
+      "assets/images/mfg/dxf/dxf-06.jpg"
+    ] },
+    iges: { title: "IGES — Pipe Rotary Laser CNC Cut: selected work", images: [
+      "assets/images/mfg/iges/iges-01.jpg",
+      "assets/images/mfg/iges/iges-02.jpg",
+      "assets/images/mfg/iges/iges-03.jpg",
+      "assets/images/mfg/iges/iges-04.jpg",
+      "assets/images/mfg/iges/iges-05.jpg",
+      "assets/images/mfg/iges/iges-06.jpg",
+      "assets/images/mfg/iges/iges-07.jpg"
+    ] },
+    fabrication: { title: "Fabrication Drawings (PDF): selected work", images: [
+      "assets/images/mfg/fabrication/fab-01.jpg",
+      "assets/images/mfg/fabrication/fab-02.jpg",
+      "assets/images/mfg/fabrication/fab-03.jpg",
+      "assets/images/mfg/fabrication/fab-04.jpg",
+      "assets/images/mfg/fabrication/fab-05.jpg"
+    ] }
+  };
+  const MEDIA = window.YN_MEDIA || "";
+  /* once the page has loaded, quietly fetch the other tabs' thumbnails so
+     switching tabs shows images immediately */
+  window.addEventListener("load", () => {
+    setTimeout(() => Object.values(MFG_EXAMPLES).forEach(d => d.images.forEach(src => {
+      new Image().src = MEDIA + src.replace(/\.jpg$/, ".webp");
+    })), 1500);
+  });
+  const mfgCards = document.getElementById("mfgCards");
+  const mfgGallery = document.getElementById("mfgGallery");
+  const mfgGalleryTitle = document.getElementById("mfgGalleryTitle");
+  const mfgGalleryGrid = document.getElementById("mfgGalleryGrid");
+
+  function renderMfgGallery(key) {
+    const data = MFG_EXAMPLES[key];
+    mfgGalleryTitle.textContent = data.title;
+    if (data.images.length) {
+      mfgGalleryGrid.innerHTML = data.images
+        .map(src => `<div class="mfg-gallery-item"><img src="${MEDIA}${src.replace(/\.jpg$/, ".webp")}" data-full="${MEDIA}${src}" alt="${data.title}" loading="lazy" decoding="async"></div>`)
+        .join("");
+    } else {
+      mfgGalleryGrid.innerHTML = Array.from({ length: 3 }).map(() => `
+        <div class="mfg-gallery-item">
+          <div class="mfg-gallery-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 16l5-5 4 4 5-6 4 5"/><circle cx="8" cy="8" r="1.3" fill="currentColor" stroke="none"/></svg>
+            <span>Example coming soon</span>
+          </div>
+        </div>`).join("");
+    }
+  }
+
+  if (mfgCards && mfgGallery) {
+    mfgCards.querySelectorAll(".mfg-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (btn.getAttribute("aria-pressed") === "true") return;
+        mfgCards.querySelectorAll(".mfg-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        renderMfgGallery(btn.dataset.service);
+      });
+    });
+    renderMfgGallery("dxf");
+  }
+
+  /* ================================================================
+     Lightbox — click any photo inside a [data-lightbox-group] (the
+     manufacturing files gallery, the gig galleries) to view it
+     full-size; arrows / swipe / arrow keys step through its group.
+  ================================================================= */
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const lightboxCaption = document.getElementById("lightboxCaption");
+  const lightboxClose = document.getElementById("lightboxClose");
+  const lightboxPrev = document.getElementById("lightboxPrev");
+  const lightboxNext = document.getElementById("lightboxNext");
+  let lightboxItems = [];
+  let lightboxIndex = 0;
+
+  function showLightboxItem(i) {
+    lightboxIndex = (i + lightboxItems.length) % lightboxItems.length;
+    const img = lightboxItems[lightboxIndex];
+    lightboxImg.src = img.dataset.full || img.src;
+    lightboxImg.alt = img.alt || "";
+    const count = lightboxItems.length > 1 ? `${lightboxIndex + 1} / ${lightboxItems.length}` : "";
+    lightboxCaption.textContent = [count, img.alt].filter(Boolean).join("  ·  ");
+  }
+
+  function openLightbox(items, index) {
+    lightboxItems = items;
+    lightbox.classList.toggle("is-single", items.length < 2);
+    showLightboxItem(index);
+    lightbox.classList.add("active");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    lightboxClose.focus({ preventScroll: true });
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("active");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  if (lightbox) {
+    document.addEventListener("click", (e) => {
+      const group = e.target.closest("[data-lightbox-group]");
+      if (!group) return;
+      const img = e.target.closest("img") || e.target.closest(".gig-shot")?.querySelector("img");
+      if (!img || !img.getAttribute("src")) return;
+      const items = [...group.querySelectorAll("img")].filter(el => el.getAttribute("src"));
+      openLightbox(items, items.indexOf(img));
+    });
+    lightboxClose.addEventListener("click", closeLightbox);
+    lightboxPrev.addEventListener("click", () => showLightboxItem(lightboxIndex - 1));
+    lightboxNext.addEventListener("click", () => showLightboxItem(lightboxIndex + 1));
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox || e.target.classList.contains("lightbox-figure")) closeLightbox();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (!lightbox.classList.contains("active")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") showLightboxItem(lightboxIndex - 1);
+      if (e.key === "ArrowRight") showLightboxItem(lightboxIndex + 1);
+    });
+    let swipeX = null;
+    lightbox.addEventListener("touchstart", (e) => { swipeX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener("touchend", (e) => {
+      if (swipeX == null || lightboxItems.length < 2) return;
+      const dx = e.changedTouches[0].clientX - swipeX;
+      swipeX = null;
+      if (Math.abs(dx) > 50) showLightboxItem(lightboxIndex + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  }
+
+  /* ================================================================
+     Video showcase — only load/play the clip once it's actually about
+     to be seen, and pause it once scrolled away, so it isn't burning
+     bandwidth or GPU decode time on a background element off-screen.
+  ================================================================= */
+  const showcaseVideo = document.getElementById("showcaseVideo");
+  const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    /* Three encodes of the same clip. Desktops get 1080p, phones and
+     smaller windows 720p; the light version only on data-saver / 2G.
+     (The browser's speed estimate is too unreliable to pick quality on.) */
+  function showcaseSource() {
+    const d = showcaseVideo.dataset;
+    const phone = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
+    if (netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || ""))) return d.srcLight;
+    return !phone && window.innerWidth >= 1100 ? d.src1080 : d.src720;
+  }
+  const veryslow = !!netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || ""));
+  if (showcaseVideo && !veryslow) {
+    /* start buffering well before it scrolls into view... */
+    new IntersectionObserver((entries, obs) => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      showcaseVideo.preload = "auto";
+      showcaseVideo.src = showcaseSource();
+      obs.disconnect();
+    }, { rootMargin: "900px 0px" }).observe(showcaseVideo);
+    /* ...and only play while it's actually visible */
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && showcaseVideo.getAttribute("src")) showcaseVideo.play().catch(() => {});
+        else showcaseVideo.pause();
+      });
+    }, { threshold: 0.15 }).observe(showcaseVideo);
+  }
+
+  /* Shop floor video: lazy-load the source once scrolled into view, but
+     never autoplay it (it's a manually-navigated slide with real audio,
+     not a background loop) — just pause if the visitor scrolls away
+     mid-playback. */
+  const shopfloorVideo = document.getElementById("shopfloorVideo");
+  if (shopfloorVideo) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (!shopfloorVideo.src && shopfloorVideo.dataset.src) shopfloorVideo.src = shopfloorVideo.dataset.src;
+        } else {
+          shopfloorVideo.pause();
+        }
+      });
+    }, { threshold: 0.15 }).observe(shopfloorVideo);
+  }
+
+  /* ================================================================
+     Sliding galleries — 3D Rendering & Visualization, Featured Shop
+     Floor. Shared helper so the width-measurement fix below only has
+     to exist (and be correct) in one place.
+  ================================================================= */
+  function initSlider(sliderId, trackSelector, slideSelector, prevId, nextId) {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+    const track = slider.querySelector(trackSelector);
+    const slides = slider.querySelectorAll(slideSelector);
+    const prevBtn = document.getElementById(prevId);
+    const nextBtn = document.getElementById(nextId);
+    let index = 0;
+
+    function goTo(i) {
+      index = (i + slides.length) % slides.length;
+      /* Measure the track itself, not the outer slider box — that box's
+         1px border made each step ~2px too wide, an error that accumulated
+         slide-over-slide until later slides sat visibly off-center. The
+         track has no border and no transform of its own, so its width
+         always matches each flex slide's real layout size. */
+      const slideWidth = track.getBoundingClientRect().width;
+      track.style.transform = `translateX(-${index * slideWidth}px)`;
+    }
+
+    prevBtn.addEventListener("click", () => goTo(index - 1));
+    nextBtn.addEventListener("click", () => goTo(index + 1));
+    window.addEventListener("resize", () => goTo(index));
+  }
+
+  window.addEventListener("load", () => {
+    setTimeout(() => document.querySelectorAll(".render-slide, img.shopfloor-slide").forEach(img => { img.loading = "eager"; }), 1000);
+  });
+  initSlider("renderSlider", ".render-slider-track", ".render-slide", "renderPrev", "renderNext");
+  initSlider("shopfloorSlider", ".shopfloor-slider-track", ".shopfloor-slide", "shopfloorPrev", "shopfloorNext");
+
+  /* ================================================================
      Fallback path — no GSAP or reduced motion: reveal, no fancy motion
   ================================================================= */
   if (!hasGSAP || reduceMotion) {
@@ -191,205 +424,6 @@
      earlier reveal animation kept getting caught mid-flight and read as
      broken, so the cards just render in their final state from the start.
      The ambient pulsing ring (pure CSS, no JS) is the only motion here. */
-
-  /* ================================================================
-     Manufacturing-file examples — DXF's selected work is pinned under
-     the buttons from the moment the page loads (no click needed); pick
-     a different button and its examples swap in instead. Drop real
-     photos into assets/images/manufacturing/ and list their filenames
-     below; until then each service shows placeholder tiles instead of
-     a broken image or a stock photo standing in for real work.
-  ================================================================= */
-  const MFG_EXAMPLES = {
-    dxf: { title: "DXF — Sheet-Metal CNC Laser Cut: selected work", images: [
-      "assets/images/mfg/dxf/dxf-02.jpg",
-      "assets/images/mfg/dxf/dxf-03.jpg",
-      "assets/images/mfg/dxf/dxf-04.jpg",
-      "assets/images/mfg/dxf/dxf-05.jpg",
-      "assets/images/mfg/dxf/dxf-06.jpg"
-    ] },
-    iges: { title: "IGES — Pipe Rotary Laser CNC Cut: selected work", images: [
-      "assets/images/mfg/iges/iges-01.jpg",
-      "assets/images/mfg/iges/iges-02.jpg",
-      "assets/images/mfg/iges/iges-03.jpg",
-      "assets/images/mfg/iges/iges-04.jpg",
-      "assets/images/mfg/iges/iges-05.jpg",
-      "assets/images/mfg/iges/iges-06.jpg",
-      "assets/images/mfg/iges/iges-07.jpg"
-    ] },
-    fabrication: { title: "Fabrication Drawings (PDF): selected work", images: [
-      "assets/images/mfg/fabrication/fab-01.jpg",
-      "assets/images/mfg/fabrication/fab-02.jpg",
-      "assets/images/mfg/fabrication/fab-03.jpg",
-      "assets/images/mfg/fabrication/fab-04.jpg",
-      "assets/images/mfg/fabrication/fab-05.jpg"
-    ] }
-  };
-  const MEDIA = window.YN_MEDIA || "";
-  /* once the page has loaded, quietly fetch the other tabs' thumbnails so
-     switching tabs shows images immediately */
-  window.addEventListener("load", () => {
-    setTimeout(() => Object.values(MFG_EXAMPLES).forEach(d => d.images.forEach(src => {
-      new Image().src = MEDIA + src.replace(/\.jpg$/, ".webp");
-    })), 1500);
-  });
-  const mfgCards = document.getElementById("mfgCards");
-  const mfgGallery = document.getElementById("mfgGallery");
-  const mfgGalleryTitle = document.getElementById("mfgGalleryTitle");
-  const mfgGalleryGrid = document.getElementById("mfgGalleryGrid");
-
-  function renderMfgGallery(key) {
-    const data = MFG_EXAMPLES[key];
-    mfgGalleryTitle.textContent = data.title;
-    if (data.images.length) {
-      mfgGalleryGrid.innerHTML = data.images
-        .map(src => `<div class="mfg-gallery-item"><img src="${MEDIA}${src.replace(/\.jpg$/, ".webp")}" data-full="${MEDIA}${src}" alt="${data.title}" loading="lazy" decoding="async"></div>`)
-        .join("");
-    } else {
-      mfgGalleryGrid.innerHTML = Array.from({ length: 3 }).map(() => `
-        <div class="mfg-gallery-item">
-          <div class="mfg-gallery-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 16l5-5 4 4 5-6 4 5"/><circle cx="8" cy="8" r="1.3" fill="currentColor" stroke="none"/></svg>
-            <span>Example coming soon</span>
-          </div>
-        </div>`).join("");
-    }
-  }
-
-  if (mfgCards && mfgGallery) {
-    mfgCards.querySelectorAll(".mfg-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (btn.getAttribute("aria-pressed") === "true") return;
-        mfgCards.querySelectorAll(".mfg-btn").forEach(b => b.setAttribute("aria-pressed", "false"));
-        btn.setAttribute("aria-pressed", "true");
-        renderMfgGallery(btn.dataset.service);
-      });
-    });
-    renderMfgGallery("dxf");
-  }
-
-  /* ================================================================
-     Lightbox — click any gallery photo (currently just the manufacturing
-     files gallery) to view it full-size.
-  ================================================================= */
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
-  const lightboxClose = document.getElementById("lightboxClose");
-
-  function openLightbox(src, alt) {
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || "";
-    lightbox.classList.add("active");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove("active");
-    lightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  if (lightbox && mfgGalleryGrid) {
-    mfgGalleryGrid.addEventListener("click", (e) => {
-      const img = e.target.closest("img");
-      if (img) openLightbox(img.dataset.full || img.src, img.alt);
-    });
-    lightboxClose.addEventListener("click", closeLightbox);
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && lightbox.classList.contains("active")) closeLightbox();
-    });
-  }
-
-  /* ================================================================
-     Video showcase — only load/play the clip once it's actually about
-     to be seen, and pause it once scrolled away, so it isn't burning
-     bandwidth or GPU decode time on a background element off-screen.
-  ================================================================= */
-  const showcaseVideo = document.getElementById("showcaseVideo");
-  const netConn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    /* Three encodes of the same clip. Desktops get 1080p, phones and
-     smaller windows 720p; the light version only on data-saver / 2G.
-     (The browser's speed estimate is too unreliable to pick quality on.) */
-  function showcaseSource() {
-    const d = showcaseVideo.dataset;
-    const phone = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 900;
-    if (netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || ""))) return d.srcLight;
-    return !phone && window.innerWidth >= 1100 ? d.src1080 : d.src720;
-  }
-  const veryslow = !!netConn && (netConn.saveData || /(^|-)2g$/.test(netConn.effectiveType || ""));
-  if (showcaseVideo && !veryslow) {
-    /* start buffering well before it scrolls into view... */
-    new IntersectionObserver((entries, obs) => {
-      if (!entries.some(e => e.isIntersecting)) return;
-      showcaseVideo.preload = "auto";
-      showcaseVideo.src = showcaseSource();
-      obs.disconnect();
-    }, { rootMargin: "900px 0px" }).observe(showcaseVideo);
-    /* ...and only play while it's actually visible */
-    new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && showcaseVideo.getAttribute("src")) showcaseVideo.play().catch(() => {});
-        else showcaseVideo.pause();
-      });
-    }, { threshold: 0.15 }).observe(showcaseVideo);
-  }
-
-  /* Shop floor video: lazy-load the source once scrolled into view, but
-     never autoplay it (it's a manually-navigated slide with real audio,
-     not a background loop) — just pause if the visitor scrolls away
-     mid-playback. */
-  const shopfloorVideo = document.getElementById("shopfloorVideo");
-  if (shopfloorVideo) {
-    new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (!shopfloorVideo.src && shopfloorVideo.dataset.src) shopfloorVideo.src = shopfloorVideo.dataset.src;
-        } else {
-          shopfloorVideo.pause();
-        }
-      });
-    }, { threshold: 0.15 }).observe(shopfloorVideo);
-  }
-
-  /* ================================================================
-     Sliding galleries — 3D Rendering & Visualization, Featured Shop
-     Floor. Shared helper so the width-measurement fix below only has
-     to exist (and be correct) in one place.
-  ================================================================= */
-  function initSlider(sliderId, trackSelector, slideSelector, prevId, nextId) {
-    const slider = document.getElementById(sliderId);
-    if (!slider) return;
-    const track = slider.querySelector(trackSelector);
-    const slides = slider.querySelectorAll(slideSelector);
-    const prevBtn = document.getElementById(prevId);
-    const nextBtn = document.getElementById(nextId);
-    let index = 0;
-
-    function goTo(i) {
-      index = (i + slides.length) % slides.length;
-      /* Measure the track itself, not the outer slider box — that box's
-         1px border made each step ~2px too wide, an error that accumulated
-         slide-over-slide until later slides sat visibly off-center. The
-         track has no border and no transform of its own, so its width
-         always matches each flex slide's real layout size. */
-      const slideWidth = track.getBoundingClientRect().width;
-      track.style.transform = `translateX(-${index * slideWidth}px)`;
-    }
-
-    prevBtn.addEventListener("click", () => goTo(index - 1));
-    nextBtn.addEventListener("click", () => goTo(index + 1));
-    window.addEventListener("resize", () => goTo(index));
-  }
-
-  window.addEventListener("load", () => {
-    setTimeout(() => document.querySelectorAll(".render-slide, img.shopfloor-slide").forEach(img => { img.loading = "eager"; }), 1000);
-  });
-  initSlider("renderSlider", ".render-slider-track", ".render-slide", "renderPrev", "renderNext");
-  initSlider("shopfloorSlider", ".shopfloor-slider-track", ".shopfloor-slide", "shopfloorPrev", "shopfloorNext");
 
   /* ================================================================
      Magnetic buttons (1-2 focal CTAs per viewport)

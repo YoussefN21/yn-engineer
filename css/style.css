@@ -574,7 +574,7 @@ svg{ width:100%; height:100%; }
 /* Lightbox — click any gallery photo to view it full-size */
 .lightbox{
   position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center;
-  padding: 48px; background: rgba(10,11,13,.92);
+  padding: 48px 96px; background: rgba(10,11,13,.92);
   opacity:0; visibility:hidden; transition: opacity .25s ease, visibility 0s linear .25s;
 }
 .lightbox.active{ opacity:1; visibility:visible; transition: opacity .25s ease; }
@@ -593,6 +593,31 @@ svg{ width:100%; height:100%; }
 }
 .lightbox-close:hover{ background: rgba(255,255,255,.2); transform: scale(1.08); }
 .lightbox-close svg{ width:18px; height:18px; }
+.lightbox-figure{
+  margin:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+}
+.lightbox-figure .lightbox-img{ min-height:0; object-fit:contain; }
+.lightbox-caption{ max-width: 760px; text-align:center; color: rgba(255,255,255,.72); font-size:.86rem; line-height:1.5; }
+.lightbox-caption:empty{ display:none; }
+.lightbox-arrow{
+  position:fixed; top:50%; translate:0 -50%; z-index:201; cursor:pointer;
+  width:48px; height:48px; border-radius:50%; padding:0;
+  background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  transition: background .2s, transform .2s;
+}
+.lightbox-arrow:hover{ background: rgba(255,255,255,.2); transform: scale(1.08); }
+.lightbox-arrow svg{ width:20px; height:20px; }
+.lightbox-prev{ left:24px; }
+.lightbox-next{ right:24px; }
+.lightbox.is-single .lightbox-arrow{ display:none; }
+@media (max-width: 620px){
+  .lightbox{ padding: 72px 12px 24px; }
+  .lightbox-arrow{ top:auto; bottom:18px; translate:none; width:42px; height:42px; }
+  .lightbox-prev{ left:calc(50% - 52px); }
+  .lightbox-next{ right:calc(50% - 52px); }
+  .lightbox-figure{ padding-bottom: 56px; }
+}
 
 /* ===================================================================
    Responsive
@@ -764,8 +789,69 @@ svg{ width:100%; height:100%; }
   }
 }
 
+.reel-chapters[hidden]{ display:none; }
+
+/* Gig tabs — one per Fiverr gig, styled like the chapter strip:
+   a hairline on top that turns accent-blue for the open gig */
+.gig-tabs{
+  display:grid; grid-template-columns: repeat(4, 1fr); gap:8px;
+  margin: -12px 0 22px;
+}
+.gig-tab{
+  display:grid; grid-template-columns: auto 1fr; align-items:baseline; column-gap:10px;
+  padding: 14px 2px 4px; border:none; border-top:3px solid var(--line); background:none;
+  text-align:left; cursor:pointer; color: var(--ink-faint);
+  transition: color .2s, border-color .25s;
+}
+.gig-tab-num{ font-family: var(--font-mono); font-size:.74rem; }
+.gig-tab-name{ font-family: var(--font-head); font-weight:500; font-size:1rem; letter-spacing:.03em; text-transform:uppercase; line-height:1.35; }
+.gig-tab:hover{ color: var(--ink); border-top-color: var(--ink-faint); }
+.gig-tab[aria-selected="true"]{ color: var(--ink); border-top-color: var(--accent); }
+.gig-tab[aria-selected="true"] .gig-tab-num{ color: var(--accent); }
+.gig-tab:focus-visible{ outline: 2px solid var(--accent); outline-offset: 4px; border-radius:4px; }
+
+/* Gig panel — what the client gets, plus that gig's three gallery images */
+.gig-panel{
+  display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr); gap: 48px; align-items:center;
+  margin-top: 44px;
+}
+.gig-panel[hidden]{ display:none; }
+.gig-panel:not([hidden]){ animation: gig-in .45s var(--ease) both; }
+@keyframes gig-in{ from{ opacity:0; transform: translateY(10px); } to{ opacity:1; transform:none; } }
+.gig-title{ font-size: clamp(1.3rem, 2vw, 1.6rem); line-height:1.2; margin-bottom: 12px; }
+.gig-text{ color: var(--ink-soft); font-size:.97rem; margin-bottom: 18px; }
+.gig-chips{ list-style:none; margin:0 0 24px; padding:0; display:flex; flex-wrap:wrap; gap:6px; }
+.gig-chips li{
+  font-family: var(--font-mono); font-size:.7rem; letter-spacing:.04em;
+  padding: 5px 9px; border-radius:6px; border:1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+}
+.gig-shots{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+.gig-shot{
+  position:relative; display:block; padding:0; border:1px solid var(--line); border-radius: var(--radius);
+  overflow:hidden; background:#e9e9eb; cursor:zoom-in; aspect-ratio: 1920 / 1154;
+  box-shadow: 0 18px 40px -26px rgba(20,23,26,.45);
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.gig-shot img{ display:block; width:100%; height:100%; object-fit:cover; }
+.gig-shot:hover{ transform: translateY(-4px); box-shadow: 0 26px 50px -24px rgba(20,23,26,.5); }
+.gig-shot:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
 @media (max-width: 860px){
   .reel-head{ flex-direction:column; align-items:flex-start; gap:14px; }
+  .gig-tabs{
+    grid-template-columns:none; grid-auto-flow:column; grid-auto-columns: minmax(150px, max-content);
+    overflow-x:auto; scrollbar-width:none; margin-top:0;
+  }
+  .gig-tabs::-webkit-scrollbar{ display:none; }
+  .gig-panel{ grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
+  .gig-shots{
+    grid-template-columns:none; grid-auto-flow:column; grid-auto-columns: 78%;
+    overflow-x:auto; scroll-snap-type: x mandatory; scrollbar-width:none;
+    margin: 0 -28px; padding: 4px 28px 18px; scroll-padding: 0 28px;
+  }
+  .gig-shots::-webkit-scrollbar{ display:none; }
+  .gig-shot{ scroll-snap-align:start; }
+  .gig-shot:hover{ transform:none; }
   .reel-chapters{
     grid-template-columns:none; grid-auto-flow:column; grid-auto-columns: 132px;
     overflow-x:auto; scrollbar-width:none; padding-bottom:6px;
@@ -781,6 +867,9 @@ svg{ width:100%; height:100%; }
   .reel-start-time{ display:none; }
   .reel-controls{ left:8px; right:8px; bottom:8px; gap:6px; padding:4px 6px; }
   .reel-time{ display:none; }
+  .gig-tabs{ grid-auto-columns: minmax(132px, max-content); }
+  .gig-tab-name{ font-size:.9rem; }
+  .gig-shots{ grid-auto-columns: 86%; margin: 0 -20px; padding: 4px 20px 18px; scroll-padding: 0 20px; }
 }
 
 /* ===================================================================
