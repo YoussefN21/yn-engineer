@@ -186,7 +186,22 @@
   function showLightboxItem(i) {
     lightboxIndex = (i + lightboxItems.length) % lightboxItems.length;
     const img = lightboxItems[lightboxIndex];
-    lightboxImg.src = img.dataset.full || img.src;
+    const full = img.dataset.full || img.src;
+    /* show the thumbnail that is already on the page straight away (never
+       the previously opened image), then swap in the full-size file once
+       it has downloaded; if that fails, the error handler in <head> falls
+       back to the copy on this site */
+    lightboxImg.src = img.currentSrc || img.src;
+    if (full !== lightboxImg.src) {
+      const hi = new Image();
+      hi.onload = hi.onerror = () => { if (lightboxItems[lightboxIndex] === img) lightboxImg.src = full; };
+      hi.src = full;
+    }
+    /* and fetch the neighbours so the arrows are instant too */
+    [1, -1].forEach((d) => {
+      const n = lightboxItems[(lightboxIndex + d + lightboxItems.length) % lightboxItems.length];
+      if (n && n.dataset.full) new Image().src = n.dataset.full;
+    });
     lightboxImg.alt = img.alt || "";
     const count = lightboxItems.length > 1 ? `${lightboxIndex + 1} / ${lightboxItems.length}` : "";
     lightboxCaption.textContent = [count, img.alt].filter(Boolean).join("  ·  ");

@@ -225,6 +225,9 @@
       panel.querySelectorAll("img[data-thumb]").forEach((img) => {
         if (img.getAttribute("src")) return;
         img.dataset.full = MEDIA + img.dataset.full;
+        /* once the thumbnail is in, fetch the full-size image too so
+           opening it in the lightbox is instant */
+        img.addEventListener("load", () => { new Image().src = img.dataset.full; }, { once: true });
         img.src = MEDIA + img.dataset.thumb;
       });
     }
