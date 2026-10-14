@@ -710,6 +710,12 @@ svg{ width:100%; height:100%; }
 .reel-start:active{ transform: scale(.98); }
 .reel-start:focus-visible{ outline: 2px solid #fff; outline-offset: 3px; }
 .reel-player:not(.is-preview) .reel-start{ opacity:0; pointer-events:none; }
+/* A gig whose film isn't online yet: its first gallery image as a still */
+.reel-player.is-still .reel-start,
+.reel-player.is-still .reel-controls{ display:none; }
+.reel-player.is-still .reel-video{ cursor:default; }
+.gig-panel.has-still .gig-shot:first-child{ display:none; }
+.gig-panel.has-still .gig-shots{ grid-template-columns: repeat(2, 1fr); }
 
 /* Full playback: custom control bar, auto-hides while playing */
 .reel-controls{
@@ -851,6 +857,7 @@ svg{ width:100%; height:100%; }
   }
   .gig-shots::-webkit-scrollbar{ display:none; }
   .gig-shot{ scroll-snap-align:start; }
+  .gig-panel.has-still .gig-shots{ grid-template-columns:none; }
   .gig-shot:hover{ transform:none; }
   .reel-chapters{
     grid-template-columns:none; grid-auto-flow:column; grid-auto-columns: 132px;

@@ -53,6 +53,7 @@
     const chapterStrip = document.getElementById("reelChapters");
     const startTimeEl = document.getElementById("reelStartTime");
     let fallbackDuration = 50;
+    let maxQuality = 2;            // 1 = this film has no 1080p file
     let quality = 1;
     let autoQuality = true;
     let inView = false;
@@ -61,6 +62,7 @@
     let stalls = [];
 
     const isPreview = () => player.classList.contains("is-preview");
+    const isStill = () => player.classList.contains("is-still");
     const fmt = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 
     /* Quality from the player's real size on screen (the browser's speed
@@ -69,7 +71,7 @@
        down by itself if playback keeps freezing. */
     function pickQuality() {
       if (slowNet()) return 0;
-      return player.clientWidth * (window.devicePixelRatio || 1) >= 1100 ? 2 : 1;
+      return Math.min(player.clientWidth * (window.devicePixelRatio || 1) >= 1100 ? 2 : 1, maxQuality);
     }
 
     function syncQualityLabel() {
@@ -133,8 +135,9 @@
     }
 
     function enterFull(at = 0) {
+      if (isStill()) return;
       player.classList.remove("is-preview");
-      if (autoQuality) quality = pickQuality();
+      quality = autoQuality ? pickQuality() : Math.min(quality, maxQuality);
       syncQualityLabel();
       video.loop = false;
       video.muted = false;
@@ -145,6 +148,13 @@
 
     function backToPreview() {
       player.classList.add("is-preview");
+      if (isStill()) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+        syncState();
+        return;
+      }
       video.loop = true;
       video.muted = true;
       const play = inView && !reduceMotion && !slowNet();
@@ -195,6 +205,11 @@
        film with sound; otherwise its silent preview loops instead.
     ---------------------------------------------------------------- */
     function useGig(tab) {
+      const hasFilm = !!tab.dataset.video;
+      player.classList.toggle("is-still", !hasFilm);
+      /* the still is that gig's first gallery image: don't show it twice */
+      document.getElementById(tab.getAttribute("aria-controls")).classList.toggle("has-still", !hasFilm);
+      maxQuality = tab.dataset.max === "720" ? 1 : 2;
       const base = MEDIA + tab.dataset.video;
       QUALITIES[0].src = `${base}-480.mp4`;
       QUALITIES[1].src = `${base}-720.mp4`;
@@ -232,7 +247,7 @@
         row.scrollTo({ left: tab.offsetLeft - row.offsetLeft - 20, behavior: "smooth" });
       }
       useGig(tab);
-      if (watching) enterFull(0);
+      if (watching && !isStill()) enterFull(0);
       else backToPreview();
     }
 
@@ -283,7 +298,7 @@
     /* Manual quality: 480p -> 720p -> 1080p -> Auto */
     qualityBtn.addEventListener("click", () => {
       if (autoQuality) { autoQuality = false; switchQuality(0); }
-      else if (quality < QUALITIES.length - 1) switchQuality(quality + 1);
+      else if (quality < maxQuality) switchQuality(quality + 1);
       else { autoQuality = true; switchQuality(pickQuality()); }
     });
 
@@ -315,7 +330,7 @@
     new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       if (!inView) video.pause();
-      else if (isPreview() && !reduceMotion && !slowNet()) video.play().catch(() => {});
+      else if (isPreview() && !isStill() && !reduceMotion && !slowNet()) video.play().catch(() => {});
     }, { threshold: 0.3 }).observe(player);
 
     /* preview = the chosen quality itself, starting to buffer before the

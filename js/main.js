@@ -214,7 +214,7 @@
       if (!group) return;
       const img = e.target.closest("img") || e.target.closest(".gig-shot")?.querySelector("img");
       if (!img || !img.getAttribute("src")) return;
-      const items = [...group.querySelectorAll("img")].filter(el => el.getAttribute("src"));
+      const items = [...group.querySelectorAll("img")].filter(el => el.getAttribute("src") && el.getClientRects().length);
       openLightbox(items, items.indexOf(img));
     });
     lightboxClose.addEventListener("click", closeLightbox);

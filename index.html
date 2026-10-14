@@ -46,7 +46,7 @@
     if (src.indexOf(base) === 0) el.src = src.slice(base.length);
   }, true);
 </script>
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
 
@@ -131,7 +131,11 @@
 
     <!-- One tab per Fiverr gig. Each tab swaps the film in the player below
          and shows that gig's gallery. data-video is the file name without
-         "-480/-720/-1080.mp4"; paths are relative to YN_MEDIA. -->
+         "-480/-720/-1080.mp4"; paths are relative to YN_MEDIA. data-max="720"
+         = no 1080p file. A tab without data-video shows data-poster as a
+         still until its film is added (gigs 2 and 4: run
+         tools/prep-gig-media.sh, then add data-video="assets/gigs/gigN/promo"
+         and point data-poster at assets/gigs/gigN/poster.webp). -->
     <div class="gig-tabs" id="gigTabs" role="tablist" aria-label="Services">
       <button type="button" class="gig-tab" role="tab" id="gigTab1" aria-controls="gigPanel1" aria-selected="true"
               data-video="assets/video/showreel" data-poster="assets/video/showreel-poster.webp" data-duration="50" data-chapters="true">
@@ -139,17 +143,17 @@
         <span class="gig-tab-name">Gym Equipment Design</span>
       </button>
       <button type="button" class="gig-tab" role="tab" id="gigTab2" aria-controls="gigPanel2" aria-selected="false" tabindex="-1"
-              data-video="assets/gigs/gig2/promo" data-poster="assets/gigs/gig2/poster.webp">
+              data-poster="assets/gigs/gig2/gallery-1.webp">
         <span class="gig-tab-num">02</span>
         <span class="gig-tab-name">3D Modeling &amp; Drawings</span>
       </button>
       <button type="button" class="gig-tab" role="tab" id="gigTab3" aria-controls="gigPanel3" aria-selected="false" tabindex="-1"
-              data-video="assets/gigs/gig3/promo" data-poster="assets/gigs/gig3/poster.webp" data-duration="49">
+              data-video="assets/gigs/gig3/promo" data-poster="assets/gigs/gig3/poster.webp" data-duration="49" data-max="720">
         <span class="gig-tab-num">03</span>
         <span class="gig-tab-name">Sheet Metal &amp; DXF</span>
       </button>
       <button type="button" class="gig-tab" role="tab" id="gigTab4" aria-controls="gigPanel4" aria-selected="false" tabindex="-1"
-              data-video="assets/gigs/gig4/promo" data-poster="assets/gigs/gig4/poster.webp" data-duration="28">
+              data-poster="assets/gigs/gig4/gallery-1.webp">
         <span class="gig-tab-num">04</span>
         <span class="gig-tab-name">Gym Products</span>
       </button>
@@ -255,7 +259,7 @@
         <a href="https://www.fiverr.com/s/mmxZLdb" target="_blank" rel="noopener" class="btn btn-primary btn-sm gig-cta">Order on Fiverr &rarr;</a>
       </div>
       <div class="gig-shots" data-lightbox-group>
-        <button type="button" class="gig-shot"><img alt="From a client sketch to a SOLIDWORKS 3D model and a technical drawing" data-thumb="assets/gigs/gig2/gallery-1-thumb.webp" data-full="assets/gigs/gig2/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="From sketch to SOLIDWORKS: client sketch, 3D model and technical drawing" data-thumb="assets/gigs/gig2/gallery-1-thumb.webp" data-full="assets/gigs/gig2/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
         <button type="button" class="gig-shot"><img alt="Rapid SOLIDWORKS 3D modeling and drawings: a family of parts with PDF drawing sheets" data-thumb="assets/gigs/gig2/gallery-2-thumb.webp" data-full="assets/gigs/gig2/gallery-2.webp" width="720" height="433" loading="lazy" decoding="async"></button>
         <button type="button" class="gig-shot"><img alt="Jaw trainer assembly: 12-part exploded view with a bill of materials and finishes" data-thumb="assets/gigs/gig2/gallery-3-thumb.webp" data-full="assets/gigs/gig2/gallery-3.webp" width="720" height="433" loading="lazy" decoding="async"></button>
       </div>
@@ -272,7 +276,7 @@
         <a href="https://www.fiverr.com/s/mmxZLdb" target="_blank" rel="noopener" class="btn btn-primary btn-sm gig-cta">Order on Fiverr &rarr;</a>
       </div>
       <div class="gig-shots" data-lightbox-group>
-        <button type="button" class="gig-shot"><img alt="Sheet metal part design and flat pattern for laser cutting" data-thumb="assets/gigs/gig3/gallery-1-thumb.webp" data-full="assets/gigs/gig3/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
+        <button type="button" class="gig-shot"><img alt="Bent part to flat pattern: sheet metal parts unfolded to DXF flat patterns with bend lines and K-factor" data-thumb="assets/gigs/gig3/gallery-1-thumb.webp" data-full="assets/gigs/gig3/gallery-1.webp" width="720" height="433" loading="lazy" decoding="async"></button>
         <button type="button" class="gig-shot"><img alt="From a photo of an old flange to a laser-ready DXF with closed contours and true circles" data-thumb="assets/gigs/gig3/gallery-2-thumb.webp" data-full="assets/gigs/gig3/gallery-2.webp" width="720" height="433" loading="lazy" decoding="async"></button>
         <button type="button" class="gig-shot"><img alt="Nested, cut and ready to build: nested DXF on a 5 mm plate, laser cutting and the finished part" data-thumb="assets/gigs/gig3/gallery-3-thumb.webp" data-full="assets/gigs/gig3/gallery-3.webp" width="720" height="433" loading="lazy" decoding="async"></button>
       </div>
@@ -926,7 +930,7 @@
 <script src="js/three-common.js?v=13"></script>
 <script src="js/hero3d.js?v=43"></script>
 <script src="js/projects3d.js?v=37"></script>
-<script src="js/main.js?v=44"></script>
-<script src="js/reel.js?v=7"></script>
+<script src="js/main.js?v=45"></script>
+<script src="js/reel.js?v=8"></script>
 </body>
 </html>
