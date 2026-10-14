@@ -10,8 +10,8 @@
 #   poster.webp + poster.jpg                         (first frame after the hook)
 #   gallery-N.webp (1920 px, lightbox) + gallery-N-thumb.webp (720 px, page)
 #
-# Afterwards: commit + push, then put that commit's hash in YN_MEDIA in
-# index.html so the new files are served from jsDelivr.
+# Afterwards: commit + push, then run tools/push-media.sh and put the hash
+# it prints in YN_MEDIA in index.html so the new files come from jsDelivr.
 set -euo pipefail
 
 SRC="${1:-/e/Business/FiverrVideo}"

@@ -36,9 +36,11 @@
      large files very slowly to visitors in Egypt and the Gulf (~70 KB/s
      measured, vs 1-2 MB/s from jsDelivr). If the CDN ever fails, any
      image/video falls back to the copy on this site.
-     After adding or changing media: commit + push it, then put that
-     commit's hash in YN_MEDIA (and in the src/poster URLs below). */
-  window.YN_MEDIA = "https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@aea957b3c9ed3d9cee20d51c4492e70f261296f3/";
+     After adding or changing media: commit + push it, then run
+     tools/push-media.sh and put the hash it prints in YN_MEDIA. (jsDelivr
+     refuses repo snapshots over 50 MB, so YN_MEDIA points at a commit on
+     the "media" branch holding only the files served through it.) */
+  window.YN_MEDIA = "https://cdn.jsdelivr.net/gh/YoussefN21/yn-engineer@115a4f7c1043f92dd9aea215869d5fc1220988de/";
   document.addEventListener("error", function (e) {
     var el = e.target, base = window.YN_MEDIA;
     if (!el || (el.tagName !== "IMG" && el.tagName !== "VIDEO")) return;
