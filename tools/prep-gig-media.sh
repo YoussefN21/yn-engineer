@@ -53,7 +53,7 @@ for n in 1 2 3; do gallery gig1 "$SRC/renders/gig1-gallery-$n" "$n"; done
 
 echo "Gig 2 - Rapid SOLIDWORKS 3D modeling + drawings"
 for n in 1 2 3; do gallery gig2 "$SRC/Gig2/renders/gig2-gallery-$n" "$n"; done
-film gig2 "$SRC/Gig2/renders/gig2-promo-final-v2.mp4" 6
+film gig2 "$SRC/Gig2/renders/gig2-promo-final-v2.mp4" 14
 
 echo "Gig 3 - Sheet metal + DXF for laser cutting"
 for n in 1 2 3; do gallery gig3 "$SRC/Gig3/renders/gig3-gallery-$n" "$n"; done
@@ -61,7 +61,7 @@ film gig3 "$SRC/Gig3/renders/gig3-promo-final.mp4" 6
 
 echo "Gig 4 - Dumbbells, kettlebells, weight plates"
 for n in 1 2 3; do gallery gig4 "$SRC/Gig4/renders/dumbbell-gig-gallery-$n" "$n"; done
-film gig4 "$SRC/Gig4/renders/gig4-promo-final.mp4" 4
+film gig4 "$SRC/Gig4/renders/gig4-promo-final.mp4" 14
 
 echo
 du -sh "$OUT"
