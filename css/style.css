@@ -273,6 +273,7 @@ svg{ width:100%; height:100%; }
 .timeline-date{ font-family: var(--font-mono); font-size:.74rem; color: var(--accent-dark); letter-spacing:.03em; }
 .timeline-content h5{ font-size:1.08rem; margin:6px 0 2px; }
 .timeline-org{ color: var(--ink-faint); font-size:.86rem; margin-bottom:8px; }
+.timeline-logo{ display:block; height:48px; width:auto; margin:10px 0 4px; }
 .timeline-content p:not(.timeline-org){ color: var(--ink-soft); font-size:.92rem; }
 
 .edu-card{ display:flex; gap:16px; padding:24px; background: var(--surface); border:1px solid var(--line); border-radius: var(--radius); }
